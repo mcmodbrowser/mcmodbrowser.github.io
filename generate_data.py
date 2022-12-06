@@ -9,6 +9,8 @@ i = 0
 if 'CURSEFORGE_TOKEN' not in os.environ:
     sys.exit("You must set the CURSEFORGE_TOKEN environmental variable to your CurseForge API key.")
 
+os.makedirs("data/response", exist_ok=True)
+
 while True:
     data = {"modIds": list(range(i * 1000, (i+1) * 1000))}
     
@@ -16,7 +18,7 @@ while True:
     
     if resp.status_code == 200:
         assert "data" in resp.json()
-        with open("mods-{}k.json".format(i), "w", encoding="utf8") as fp:
+        with open("data/response/mods-{}k.json".format(i), "w", encoding="utf8") as fp:
             json.dump(resp.json(), fp)
     else:
         print("ERROR: got status code", resp.status_code)

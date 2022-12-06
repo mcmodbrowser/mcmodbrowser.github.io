@@ -74,7 +74,7 @@ outData = {
 i = 0
 with tqdm() as pb:
     while True:
-        filename = "response/mods-{}k.json".format(i)
+        filename = "data/response/mods-{}k.json".format(i)
         
         if os.path.exists(filename):
             data = {}
@@ -84,6 +84,9 @@ with tqdm() as pb:
             for mod in data["data"]:
                 if mod["gameId"] != 432:
                     # Not a Minecraft addon
+                    continue
+                if mod["status"] != 4:
+                    # Not approved
                     continue
                 
                 addonType = addonClassIdToType(mod["classId"])
@@ -126,5 +129,5 @@ with tqdm() as pb:
         
         pb.update()
 
-with open("index.json", "w", encoding="utf8") as fp:
+with open("data/index.json", "w", encoding="utf8") as fp:
     json.dump(outData, fp)
