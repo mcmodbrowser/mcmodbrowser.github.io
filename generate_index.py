@@ -111,7 +111,7 @@ with tqdm() as pb:
                 outMod = {
                     "name": mod["name"],
                     "desc": mod["summary"],
-                    "author": [author["name"] for author in mod["authors"]],
+                    "authors": [author["name"] for author in mod["authors"]],
                     "downloads": mod["downloadCount"],
                     "url": mod["links"]["websiteUrl"],
                     "versions": versions

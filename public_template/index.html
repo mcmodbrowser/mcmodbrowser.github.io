@@ -94,12 +94,23 @@
 <table id='sort'>
 <thead>
 	<tr>
+		<th data-sort="string">CF</th>
 		<th data-sort="string">Name</th>
 		<th data-sort="string">Description</th>
 		<th data-sort="string">Author(s)</th>
 		<th data-sort="int">Download count</th>
 		<th data-sort="string">Last modified</th>
 	</tr>
+	{% for mod in mods %}
+	<tr>
+		<td><a href={{ mod.url }}>CF</a></td>
+		<td>{{ mod.name }}</td>
+		<td>{{ mod.description}}</td>
+		<td>{{ mod.authors }}</td>
+		<td data-sort-value="{{ mod.downloads }}" class="num">{{ mod.downloadsFormatted }}</td>
+		<td>{{ mod.lastModifiedDefault }}</td>
+	</tr>
+	{% endfor %}
 </thead>
 <tbody id="tbody">
 </tbody>
