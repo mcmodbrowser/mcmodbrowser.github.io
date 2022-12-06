@@ -19,27 +19,39 @@ def loadJson(path):
 
 index = loadJson("data/index.json")
 
-def createTemplateEntry(mod):
-    if 'authors' not in mod:
-        print("WTF")
-        print(mod)
-    return {
-    'name': mod['name'],
-    'url': mod['url'],
-    'description': mod['desc'],
-    'authors': ', '.join(mod['authors']),
-    'downloads': mod['downloads'],
-    'downloadsFormatted': mod['downloads'],
-    'lastModifiedDefault': '0000-00-00'
-    }
+def createTemplateEntries(addons, version):
+    result = []
+    
+    for slug in addons:
+        addonMulti = addons[slug]
+        
+        addon = addonMulti['curse']
+        
+        if not version in addon['versions']:
+            continue
+        
+        result.append({
+            'name': addon['name'],
+            'url': addon['url'],
+            'description': addon['desc'],
+            'authors': ', '.join(addon['authors']),
+            'downloads': addon['downloads'],
+            'downloadsFormatted': addon['downloads'],
+            'lastModifiedDefault': '0000-00-00'
+        })
+    
+    return result
     
 
-mods = [createTemplateEntry(index['data']['mods'][mod]['curse']) for mod in index['data']['mods']]
+TEMPLATE = open('public/index.html', "r", encoding="utf8").read()
+template = Template(TEMPLATE)
 
-for file in glob.glob("public/**/*.html", recursive=True):
-    TEMPLATE = open(file, "r", encoding="utf8").read()
-
-    template = Template(TEMPLATE)
-
-    with open(file, "w", encoding="utf8") as fp:
-        fp.write(template.render(mods=mods))
+#for addonType in ['bukkitPlugins', 'mods', 'resourcePacks', 'worlds', 'modpacks', 'customizations', 'addons']:
+for addonType in ['mods']:
+    for version in ['1.7.10']:
+        addons = createTemplateEntries(index['data'][addonType], version)
+        
+        os.makedirs("public/" + addonType, exist_ok=True)
+        
+        with open("public/" + addonType + "/" + version + ".html", "w", encoding="utf8") as fp:
+            fp.write(template.render(addons=addons, rootPath="../"))

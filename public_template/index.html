@@ -10,10 +10,10 @@
 	<script src='http://tristen.ca/tablesort/src/sorts/tablesort.filesize.js'></script>
 	<script src='http://tristen.ca/tablesort/src/sorts/tablesort.number.js'></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="stupidtable.js"></script>
-	<link rel="icon" href="favicon.ico" type="image/x-icon" />
+	<script src="{{ rootPath }}stupidtable.js"></script>
+	<link rel="icon" href="{{ rootPath }}favicon.ico" type="image/x-icon" />
 	<div id="style">
-		<link rel="stylesheet" href="dark.css">
+		<link rel="stylesheet" href="{{ rootPath }}dark.css">
 	</div>
 </head>
 <body>
@@ -101,24 +101,24 @@
 		<th data-sort="int">Download count</th>
 		<th data-sort="string">Last modified</th>
 	</tr>
-	{% for mod in mods %}
-	<tr>
-		<td><a href={{ mod.url }}>CF</a></td>
-		<td>{{ mod.name }}</td>
-		<td>{{ mod.description}}</td>
-		<td>{{ mod.authors }}</td>
-		<td data-sort-value="{{ mod.downloads }}" class="num">{{ mod.downloadsFormatted }}</td>
-		<td>{{ mod.lastModifiedDefault }}</td>
-	</tr>
-	{% endfor %}
 </thead>
 <tbody id="tbody">
+	{% for addon in addons %}
+	<tr>
+		<td><a href={{ addon.url }}>CF</a></td>
+		<td>{{ addon.name }}</td>
+		<td>{{ addon.description}}</td>
+		<td>{{ addon.authors }}</td>
+		<td data-sort-value="{{ addon.downloads }}" class="num">{{ addon.downloadsFormatted }}</td>
+		<td>{{ addon.lastModifiedDefault }}</td>
+	</tr>
+	{% endfor %}
 </tbody>
 </table>
 
 <script>
 	if(localStorage["style"]){
-		$("#style link").attr("href", localStorage["style"] + ".css");
+		$("#style link").attr("href", "{{ rootPath }}" + localStorage["style"] + ".css");
 	}
 	
 	var styles = ["dark", "gray", "gay", "boring", "stars"];
