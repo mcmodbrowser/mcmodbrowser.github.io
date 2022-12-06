@@ -87,11 +87,11 @@ addonTypeHumanizer = {
     'customizations': 'Customizations',
     'addons': 'Addons'
 }
-VERSIONS = ['1.7.10']
+VERSIONS = ['1.7.10', '1.12.2', '1.16.5', '1.18.2']
 
 for addonType in ADDON_TYPES:
     for version in VERSIONS:
-        print("Generating", version, "/", addonType)
+        print("Generating", addonType, "/", version)
         addons = list(createTemplateEntries(index['data'].get(addonType) or [], version))
         
         os.makedirs("public/" + addonType, exist_ok=True)
