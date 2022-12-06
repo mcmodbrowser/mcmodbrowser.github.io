@@ -1,0 +1,38 @@
+th, td {
+  padding: 9px 10px; 
+}
+
+body {
+	color: #E5E5E5;
+	background-color: #321d2f;
+}
+
+th {
+  background-color: #3C233D;
+}
+
+tr:nth-child(even) {
+  background-color: #281726;
+}
+tr:nth-child(odd) {
+  background-color: #321d2f;
+}
+tr:hover {
+	background-color: #3C233D;
+}
+
+.active {
+	color: white;
+}
+
+a {
+	color: #30FFA8;
+}
+
+#msg {
+	color: #30FFA8;
+}
+
+#title {
+	color: white;
+}

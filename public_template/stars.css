@@ -1,0 +1,42 @@
+th, td {
+  padding: 9px 10px; 
+}
+
+body {
+	color: #FFFFFF;
+	/*background-color: #321d2f;*/
+	background-image: url("stars.gif");
+	background-repeat: repeat;
+}
+
+th {
+  background-color: #3C233D;
+}
+
+tr:nth-child(even) {
+  background-color: #281726;
+  opacity: 0.9;
+}
+tr:nth-child(odd) {
+  background-color: #321d2f;
+  opacity: 0.95;
+}
+tr:hover {
+	background-color: #3C233D;
+}
+
+.active {
+	color: white;
+}
+
+a {
+	color: #FFF600;
+}
+
+#msg {
+	color: #FFF600;
+}
+
+#title {
+	color: white;
+}

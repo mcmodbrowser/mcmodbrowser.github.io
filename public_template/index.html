@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Minecraft Mod Browser</title>
+  <meta charset='utf-8' />
+  <link href='http://tristen.ca/tablesort/tablesort.css' rel='stylesheet'>
+  <script src='http://tristen.ca/tablesort/src/tablesort.js'></script>
+  <script src='http://tristen.ca/tablesort/src/sorts/tablesort.date.js'></script>
+  <script src='http://tristen.ca/tablesort/src/sorts/tablesort.dotsep.js'></script>
+  <script src='http://tristen.ca/tablesort/src/sorts/tablesort.filesize.js'></script>
+  <script src='http://tristen.ca/tablesort/src/sorts/tablesort.number.js'></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="stupidtable.js"></script>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <div id="style">
+	<link rel="stylesheet" href="dark.css">
+  </div>
+</head>
+<body>
+
+<style type="text/css">
+    body {
+      font-family: "Ubuntu", "Trebuchet MS", sans-serif;
+    }
+    table {
+      border-collapse: collapse;
+      margin: 1em auto;
+    }
+    
+    th[data-sort]{
+      cursor:pointer;
+    }
+
+    /* just some random additional styles for a more real-world situation */
+    #msg {
+      text-align: center;
+    }
+    
+    .disabled {
+      opacity: 0.5;
+    }
+	
+	.ver {
+		padding-right: 10px;
+		cursor: pointer;
+		text-decoration: none;
+	}
+	.active {
+		font-weight: bold;
+	}
+
+	
+	#title {
+		font-size: 2em;
+	}
+	
+	.for {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	
+	#versions {
+		display: inline;
+	}
+	
+	#msg {
+		display: inline;
+	}
+	td.num {
+		text-align: right;
+	}
+	
+	a {
+		text-decoration: none;
+		cursor: pointer;
+	}
+	
+	#swatch {
+		position: absolute;
+		right: 0;
+		top: 0;
+		padding: 20px;
+	}
+  </style>
+  
+
+
+<span class="title" id="title">Minecraft mods</span> <span class="for">for</span>
+<div id="versions"></div>
+<p id="msg">&nbsp</p>
+<a id="swatch" onclick="toggleStyle()">Toggle style</a>
+<p id="updated">&nbsp</p>
+
+<table id='sort'>
+<thead>
+  <tr>
+	<th data-sort="string">Name</th>
+	<th data-sort="string">Description</th>
+	<th data-sort="string">Author(s)</th>
+	<th data-sort="int">Download count</th>
+	<th data-sort="string">Last modified</th>
+  </tr>
+</thead>
+<tbody id="tbody">
+</tbody>
+</table>
+
+<script>
+	if(localStorage["style"]){
+		$("#style link").attr("href", localStorage["style"] + ".css");
+	}
+	
+	var styles = ["dark", "gray", "gay", "boring", "stars"];
+	function toggleStyle(){
+		currentStyle = localStorage["style"];
+		if(!currentStyle){
+			currentStyle = "dark";
+		}
+		var newStyle = styles[(styles.indexOf(currentStyle) + 1) % styles.length];
+		$("#style link").attr("href", newStyle + ".css");
+		localStorage["style"] = newStyle;
+	}
+	
+	function doThing(){
+		var table = $("#sort").stupidtable();
+
+        table.on("beforetablesort", function (event, data) {
+          // Apply a "disabled" look to the table while sorting.
+          // Using addClass for "testing" as it takes slightly longer to render.
+          $("#msg").text("Sorting...");
+          $("table").addClass("disabled");
+        });
+
+        table.on("aftertablesort", function (event, data) {
+          // Reset loading message.
+          $("#msg").html("&nbsp;");
+          $("table").removeClass("disabled");
+
+          var th = $(this).find("th");
+          th.find(".arrow").remove();
+          var dir = $.fn.stupidtable.dir;
+
+          var arrow = data.direction === dir.ASC ? "&uarr;" : "&darr;";
+          th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
+        });
+	}
+	
+	$(document).ready(function(){
+		$.ajaxSetup({ cache: false });
+		
+		["1.16.5", "1.15.2", "1.12.2", "1.10.2", "1.8.9", "1.7.10", "1.6.4"].forEach(function(ver){
+			verDash = ver.replace(/\./g, "-");
+			$("#versions").append($("<a class=ver onclick=\"loadVersion('" + ver + "', this)\" id=ver-" + verDash + " href=#" + ver + ">" + ver + "</a>"));
+		}
+		);
+		
+		version = "1.16.5";
+		if(window.location.hash) {
+		  version = window.location.hash.slice(1);
+		}
+		
+		loadVersion(version, $("#ver-" + version.replace(/\./g, "-")));
+		
+		doThing();
+	});
+	
+	function loadVersion(version, elem){
+		$(".active").removeClass("active");
+		$(elem).addClass("active");
+		$("#msg").text("Loading data...");
+		$.getJSON("data/" + version + ".json", function(json) {
+			$("#updated").text(json.data.length + " mods, updated at " + json.timestamp.replace(/T/g, String.fromCharCode(160)) + ". All times are UTC.");
+			
+			old_tbody = document.getElementById('tbody')
+			var tbody = document.createElement("tbody");
+			tbody.id = "tbody";
+			json.data.forEach(function(mod){
+				var row = tbody.insertRow(tbody.rows.length);
+				var cell0 = row.insertCell(0);
+				cell0.innerHTML = "<a href=\"https://www.curseforge.com/minecraft/mc-mods/" + mod.s + "\">" + mod.n + "</a>";
+				var cell1 = row.insertCell(1);
+				cell1.innerHTML = mod.d;
+				var cell2 = row.insertCell(2);
+				cell2.innerHTML = mod.a;
+				var cell3 = row.insertCell(3);
+				cell3.setAttribute("data-sort-value", mod.c.replaceAll(",", ""));
+				cell3.innerHTML = mod.c;
+				cell3.classList.add("num");
+				var cell4 = row.insertCell(4);
+				var timestamp = mod.m.replace(/T/g, String.fromCharCode(160)).replace(/Z/, "");
+				if(timestamp == "1970-01-01"){
+					timestamp = "????-??-?? ??:??:??";
+				}
+				cell4.innerHTML = "<a href=\"https://www.curseforge.com/minecraft/mc-mods/" + mod.s + "/files/all?filter-game-version=" + json.gameVerUrl + "\">" + timestamp + "</a>";
+			});
+			old_tbody.parentNode.replaceChild(tbody, old_tbody);
+			$("#msg").html("&nbsp");
+			$(".arrow").remove();
+		});
+	}
+</script>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+th, td {
+	      padding: 5px 10px;
+      border: 1px solid #aaa;
+
+}
+
+th {
+	background-color: #eee;
+}
+
+#msg {
+	color: #0a0;
+}
+
+/* zebra-striping seems to really slow down Opera sometimes */
+tr:nth-child(even) {
+  background-color: #f9f9f7;
+}
+tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.active {
+	color: black;
+}
+
+tr:hover {
+	   background-color: lightgrey;
+}
