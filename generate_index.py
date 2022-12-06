@@ -104,6 +104,10 @@ with tqdm() as pb:
                     verData[modLoader] = {"fileId": ver["fileId"]}
                     versions[ver["gameVersion"]] = verData
                 
+                if not versions:
+                    # Mod has no files, probably junk
+                    continue
+                
                 outMod = {
                     "name": mod["name"],
                     "desc": mod["summary"],
