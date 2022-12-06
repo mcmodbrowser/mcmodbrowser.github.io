@@ -46,7 +46,7 @@ def fileIdToApproximateEpoch(p):
         return mapping[prevp] + (mapping[nextp] - mapping[prevp]) * ((p - prevp) / (mapping[nextp] - mapping[prevp]))
         
 def fileIdToApproximateDate(p):
-    return datetime.datetime.utcfromtimestamp(fileIdToApproximateEpoch(p)).isoformat()
+    return datetime.datetime.utcfromtimestamp(fileIdToApproximateEpoch(p)).isoformat().split("T")[0]
 
 def createTemplateEntries(addons, version):
     result = []
