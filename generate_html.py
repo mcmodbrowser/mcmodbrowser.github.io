@@ -77,12 +77,34 @@ def createTemplateEntries(addons, version):
 TEMPLATE = open('public/index.html', "r", encoding="utf8").read()
 template = Template(TEMPLATE)
 
-#for addonType in ['bukkitPlugins', 'mods', 'resourcePacks', 'worlds', 'modpacks', 'customizations', 'addons']:
-for addonType in ['mods']:
-    for version in ['1.7.10']:
-        addons = createTemplateEntries(index['data'][addonType], version)
+ADDON_TYPES = ['bukkitPlugins', 'mods', 'resourcePacks', 'worlds', 'modpacks', 'customizations', 'addons']
+addonTypeHumanizer = {
+    'bukkitPlugins': 'Bukkit plugins',
+    'mods': 'Mods',
+    'resourcePacks': 'Resource packs',
+    'worlds': 'Worlds',
+    'modpacks': 'Modpacks',
+    'customizations': 'Customizations',
+    'addons': 'Addons'
+}
+VERSIONS = ['1.7.10']
+
+for addonType in ADDON_TYPES:
+    for version in VERSIONS:
+        print("Generating", version, "/", addonType)
+        addons = list(createTemplateEntries(index['data'].get(addonType) or [], version))
         
         os.makedirs("public/" + addonType, exist_ok=True)
         
         with open("public/" + addonType + "/" + version + ".html", "w", encoding="utf8") as fp:
-            fp.write(template.render(addons=addons, rootPath="../"))
+            fp.write(template.render(
+                addons=addons,
+                rootPath="../",
+                versions=VERSIONS,
+                addonType=addonType,
+                addonTypes=ADDON_TYPES,
+                addonTypeHumanizer=addonTypeHumanizer,
+                addonCount=len(addons),
+                updateTime="????-??-??",
+                version=version)
+            )

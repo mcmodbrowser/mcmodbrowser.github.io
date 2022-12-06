@@ -86,10 +86,19 @@
 
 
 <span class="title" id="title">Minecraft mods</span> <span class="for">for</span>
-<div id="versions"></div>
+<div id="versions">
+	{% for version in versions %}
+	<a class=ver href={{ rootPath }}{{ addonType }}/{{ version }}.html>{{ version }}</a>
+	{% endfor %}
+</div>
 <p id="msg">&nbsp</p>
 <a id="swatch" onclick="toggleStyle()">Toggle style</a>
-<p id="updated">&nbsp</p>
+<p id="addonTypes">
+	{% for addonType in addonTypes %}
+	<a class=ver href={{ rootPath }}{{ addonType }}/{{ version }}.html>{{ addonTypeHumanizer[addonType] }}</a>
+	{% endfor %}
+</p>
+<p id="updated">{{ addonCount }} {{ addonTypeHumanizer[addonType].lower() }}, updated at {{ updateTime }}. All times are UTC.</p>
 
 <table id='sort'>
 <thead>
@@ -159,56 +168,8 @@
 	$(document).ready(function(){
 		$.ajaxSetup({ cache: false });
 		
-		["1.16.5", "1.15.2", "1.12.2", "1.10.2", "1.8.9", "1.7.10", "1.6.4"].forEach(function(ver){
-			verDash = ver.replace(/\./g, "-");
-			$("#versions").append($("<a class=ver onclick=\"loadVersion('" + ver + "', this)\" id=ver-" + verDash + " href=#" + ver + ">" + ver + "</a>"));
-		}
-		);
-		
-		version = "1.16.5";
-		if(window.location.hash) {
-		  version = window.location.hash.slice(1);
-		}
-		
-		loadVersion(version, $("#ver-" + version.replace(/\./g, "-")));
-		
 		doThing();
 	});
-	
-	function loadVersion(version, elem){
-		$(".active").removeClass("active");
-		$(elem).addClass("active");
-		$("#msg").text("Loading data...");
-		$.getJSON("data/" + version + ".json", function(json) {
-			$("#updated").text(json.data.length + " mods, updated at " + json.timestamp.replace(/T/g, String.fromCharCode(160)) + ". All times are UTC.");
-			
-			old_tbody = document.getElementById('tbody')
-			var tbody = document.createElement("tbody");
-			tbody.id = "tbody";
-			json.data.forEach(function(mod){
-				var row = tbody.insertRow(tbody.rows.length);
-				var cell0 = row.insertCell(0);
-				cell0.innerHTML = "<a href=\"https://www.curseforge.com/minecraft/mc-mods/" + mod.s + "\">" + mod.n + "</a>";
-				var cell1 = row.insertCell(1);
-				cell1.innerHTML = mod.d;
-				var cell2 = row.insertCell(2);
-				cell2.innerHTML = mod.a;
-				var cell3 = row.insertCell(3);
-				cell3.setAttribute("data-sort-value", mod.c.replaceAll(",", ""));
-				cell3.innerHTML = mod.c;
-				cell3.classList.add("num");
-				var cell4 = row.insertCell(4);
-				var timestamp = mod.m.replace(/T/g, String.fromCharCode(160)).replace(/Z/, "");
-				if(timestamp == "1970-01-01"){
-					timestamp = "????-??-?? ??:??:??";
-				}
-				cell4.innerHTML = "<a href=\"https://www.curseforge.com/minecraft/mc-mods/" + mod.s + "/files/all?filter-game-version=" + json.gameVerUrl + "\">" + timestamp + "</a>";
-			});
-			old_tbody.parentNode.replaceChild(tbody, old_tbody);
-			$("#msg").html("&nbsp");
-			$(".arrow").remove();
-		});
-	}
 </script>
 
 </div>
