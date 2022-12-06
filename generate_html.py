@@ -3,6 +3,7 @@ import os
 import sys
 import shutil
 import json
+import datetime
 from jinja2 import Template
 
 if False in [os.path.exists(x) for x in [".git", "generate_html.py", "public_template"]]:
@@ -18,6 +19,34 @@ def loadJson(path):
         return json.load(fp)
 
 index = loadJson("data/index.json")
+fileDates = loadJson("data/fileDates.json")
+
+fileDatesMapping = {}
+for id, date in fileDates['data'].items():
+    fileDatesMapping[int(id)] = date
+fileDatesMappingKeys = sorted([int(x) for x in fileDatesMapping.keys()])
+
+def fileIdToApproximateEpoch(p):
+    mapping = fileDatesMapping
+    points = fileDatesMappingKeys
+    
+    if p < points[0]:
+        return (mapping[points[0]] - mapping[points[1]]) * (mapping[points[0]] - p)
+    elif p > points[-1]:
+        return (mapping[points[-1]] - mapping[points[-2]]) * (p - mapping[points[-1]])
+    else:
+        prevp = (p // 1000) * 1000
+        while prevp not in points:
+            prevp -= 1000
+        
+        nextp = ((p // 1000) + 1) * 1000
+        while nextp not in points:
+            nextp += 1000
+        
+        return mapping[prevp] + (mapping[nextp] - mapping[prevp]) * ((p - prevp) / (mapping[nextp] - mapping[prevp]))
+        
+def fileIdToApproximateDate(p):
+    return datetime.datetime.utcfromtimestamp(fileIdToApproximateEpoch(p)).isoformat()
 
 def createTemplateEntries(addons, version):
     result = []
@@ -37,7 +66,7 @@ def createTemplateEntries(addons, version):
             'authors': ', '.join(addon['authors']),
             'downloads': addon['downloads'],
             'downloadsFormatted': addon['downloads'],
-            'lastModifiedDefault': '0000-00-00'
+            'lastModifiedDefault': fileIdToApproximateDate(max(x['fileId'] for x in addon['versions'][version].values()))
         })
     
     return result
