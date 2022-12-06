@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Minecraft Mod Browser</title>
-  <meta charset='utf-8' />
-  <link href='http://tristen.ca/tablesort/tablesort.css' rel='stylesheet'>
-  <script src='http://tristen.ca/tablesort/src/tablesort.js'></script>
-  <script src='http://tristen.ca/tablesort/src/sorts/tablesort.date.js'></script>
-  <script src='http://tristen.ca/tablesort/src/sorts/tablesort.dotsep.js'></script>
-  <script src='http://tristen.ca/tablesort/src/sorts/tablesort.filesize.js'></script>
-  <script src='http://tristen.ca/tablesort/src/sorts/tablesort.number.js'></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="stupidtable.js"></script>
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <div id="style">
-	<link rel="stylesheet" href="dark.css">
-  </div>
+	<title>Minecraft Mod Browser</title>
+	<meta charset='utf-8' />
+	<link href='http://tristen.ca/tablesort/tablesort.css' rel='stylesheet'>
+	<script src='http://tristen.ca/tablesort/src/tablesort.js'></script>
+	<script src='http://tristen.ca/tablesort/src/sorts/tablesort.date.js'></script>
+	<script src='http://tristen.ca/tablesort/src/sorts/tablesort.dotsep.js'></script>
+	<script src='http://tristen.ca/tablesort/src/sorts/tablesort.filesize.js'></script>
+	<script src='http://tristen.ca/tablesort/src/sorts/tablesort.number.js'></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="stupidtable.js"></script>
+	<link rel="icon" href="favicon.ico" type="image/x-icon" />
+	<div id="style">
+		<link rel="stylesheet" href="dark.css">
+	</div>
 </head>
 <body>
 
 <style type="text/css">
-    body {
-      font-family: "Ubuntu", "Trebuchet MS", sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      margin: 1em auto;
-    }
-    
-    th[data-sort]{
-      cursor:pointer;
-    }
+	body {
+		font-family: "Ubuntu", "Trebuchet MS", sans-serif;
+	}
+	table {
+		border-collapse: collapse;
+		margin: 1em auto;
+	}
+	
+	th[data-sort]{
+		cursor:pointer;
+	}
 
-    /* just some random additional styles for a more real-world situation */
-    #msg {
-      text-align: center;
-    }
-    
-    .disabled {
-      opacity: 0.5;
-    }
+	/* just some random additional styles for a more real-world situation */
+	#msg {
+		text-align: center;
+	}
+	
+	.disabled {
+		opacity: 0.5;
+	}
 	
 	.ver {
 		padding-right: 10px;
@@ -81,8 +81,8 @@
 		top: 0;
 		padding: 20px;
 	}
-  </style>
-  
+</style>
+
 
 
 <span class="title" id="title">Minecraft mods</span> <span class="for">for</span>
@@ -93,13 +93,13 @@
 
 <table id='sort'>
 <thead>
-  <tr>
-	<th data-sort="string">Name</th>
-	<th data-sort="string">Description</th>
-	<th data-sort="string">Author(s)</th>
-	<th data-sort="int">Download count</th>
-	<th data-sort="string">Last modified</th>
-  </tr>
+	<tr>
+		<th data-sort="string">Name</th>
+		<th data-sort="string">Description</th>
+		<th data-sort="string">Author(s)</th>
+		<th data-sort="int">Download count</th>
+		<th data-sort="string">Last modified</th>
+	</tr>
 </thead>
 <tbody id="tbody">
 </tbody>
@@ -124,25 +124,25 @@
 	function doThing(){
 		var table = $("#sort").stupidtable();
 
-        table.on("beforetablesort", function (event, data) {
-          // Apply a "disabled" look to the table while sorting.
-          // Using addClass for "testing" as it takes slightly longer to render.
-          $("#msg").text("Sorting...");
-          $("table").addClass("disabled");
-        });
+		table.on("beforetablesort", function (event, data) {
+			// Apply a "disabled" look to the table while sorting.
+			// Using addClass for "testing" as it takes slightly longer to render.
+			$("#msg").text("Sorting...");
+			$("table").addClass("disabled");
+		});
 
-        table.on("aftertablesort", function (event, data) {
-          // Reset loading message.
-          $("#msg").html("&nbsp;");
-          $("table").removeClass("disabled");
+		table.on("aftertablesort", function (event, data) {
+			// Reset loading message.
+			$("#msg").html("&nbsp;");
+			$("table").removeClass("disabled");
 
-          var th = $(this).find("th");
-          th.find(".arrow").remove();
-          var dir = $.fn.stupidtable.dir;
+			var th = $(this).find("th");
+			th.find(".arrow").remove();
+			var dir = $.fn.stupidtable.dir;
 
-          var arrow = data.direction === dir.ASC ? "&uarr;" : "&darr;";
-          th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
-        });
+			var arrow = data.direction === dir.ASC ? "&uarr;" : "&darr;";
+			th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
+		});
 	}
 	
 	$(document).ready(function(){
