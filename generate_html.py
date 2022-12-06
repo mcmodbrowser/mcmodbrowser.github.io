@@ -69,6 +69,8 @@ def createTemplateEntries(addons, version):
             'lastModifiedDefault': fileIdToApproximateDate(max(x['fileId'] for x in addon['versions'][version].values()))
         })
     
+    result = reversed(sorted(result, key=lambda addon: addon['lastModifiedDefault']))
+    
     return result
     
 
