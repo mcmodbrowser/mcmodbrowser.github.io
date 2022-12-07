@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link id="style" rel="stylesheet" href="{{ rootPath }}dark.css">
+	<script>
+	if(localStorage["style"]){
+		setStyle(localStorage["style"]);
+	}
+	
+	function setStyle(style){
+		document.getElementById("style").setAttribute("href", "{{ rootPath }}" + style + ".css");
+	}
+	</script>
 	<title>Minecraft Mod Browser</title>
 	<meta charset='utf-8' />
 	<link href='http://tristen.ca/tablesort/tablesort.css' rel='stylesheet'>
@@ -12,9 +22,6 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="{{ rootPath }}stupidtable.js"></script>
 	<link rel="icon" href="{{ rootPath }}favicon.ico" type="image/x-icon" />
-	<div id="style">
-		<link rel="stylesheet" href="{{ rootPath }}dark.css">
-	</div>
 </head>
 <body>
 
@@ -197,14 +204,6 @@
 </table>
 
 <script>
-	if(localStorage["style"]){
-		setStyle(localStorage["style"]);
-	}
-	
-	function setStyle(style){
-		$("#style link").attr("href", "{{ rootPath }}" + style + ".css");
-	}
-	
 	var styles = ["dark", "gray", "gay", "boring", "crafty"];
 	function toggleStyle(){
 		currentStyle = localStorage["style"];
