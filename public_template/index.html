@@ -3,7 +3,8 @@
 <head>
 	<link id="style" rel="stylesheet" href="{{ rootPath }}green_dark.css">
 	<script>
-	if(localStorage["style"]){
+	var styles = ["green_dark", "blue_dark", "pink_dark", "light", "minecraft"];
+	if(localStorage["style"] && styles.includes(localStorage["style"])){
 		setStyle(localStorage["style"]);
 	}
 	
@@ -209,11 +210,10 @@
 <p id="disclaimer">Modification dates are approximate. Data provided by the CurseForge API.</p>
 
 <script>
-	var styles = ["green_dark", "blue_dark", "pink_dark", "light", "minecraft"];
 	function toggleStyle(){
 		currentStyle = localStorage["style"];
-		if(!currentStyle){
-			currentStyle = "dark";
+		if(!currentStyle || !styles.includes(currentStyle)){
+			currentStyle = styles[0];
 		}
 		var newStyle = styles[(styles.indexOf(currentStyle) + 1) % styles.length];
 		setStyle(newStyle);
