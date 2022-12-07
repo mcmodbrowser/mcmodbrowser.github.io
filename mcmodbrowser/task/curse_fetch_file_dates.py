@@ -19,14 +19,15 @@ def run():
 
     outFile = "data/fileDates.json"
     
-    mapping = {}
+    i = 0
+    mapping = {'data': {}}
     
     if os.path.exists(outFile):
         mapping = loadJson(outFile)
-    
-    i = max(mapping["data"].keys() // 1000) + 1 if mapping else 0
+        i = (max([int(x) for x in mapping["data"].keys()]) // 1000000) + 0
 
     emptyCombo = 0
+    fetched = 0
 
     while True:
         data = {"fileIds": [x * 1000 for x in list(range(i * 1000, (i+1) * 1000))]}
@@ -43,12 +44,18 @@ def run():
                     print("Got three empty responses in a row, terminating.")
                     break
             
+            fetched += len(resp.json()['data'])
+            
             for file in resp.json()['data']:
-                mapping[file['id']] = dp.isoparse(file['fileDate']).timestamp()
+                mapping['data'][file['id']] = dp.isoparse(file['fileDate']).timestamp()
         else:
             print("ERROR: got status code", resp.status_code)
             break
         
         i += 1
+    
+    print("Fetched", fetched, "values")
 
-    writeJson({"data": mapping, "lastModified":  datetime.datetime.utcnow().timestamp()}, outFile)
+    mapping["lastModified"] = datetime.datetime.utcnow().timestamp()
+
+    writeJson(mapping, outFile)
