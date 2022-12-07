@@ -1,2 +1,5 @@
 data/
 public/
+.vscode/
+__pycache__/
+.env
