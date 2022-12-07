@@ -1,6 +1,7 @@
 import json
 import os
 from tqdm import tqdm
+import dateutil.parser as dp
 
 # SCHEMA
 '''
@@ -71,6 +72,8 @@ outData = {
     "cursors": {}
 }
 
+maxModifiedTimestamp = 0
+
 i = 0
 with tqdm() as pb:
     while True:
@@ -103,6 +106,10 @@ with tqdm() as pb:
                     # Mod has no files, probably junk
                     continue
                 
+                modifiedTimestamp = dp.isoparse(mod['dateModified']).timestamp()
+                if modifiedTimestamp > maxModifiedTimestamp:
+                    maxModifiedTimestamp = modifiedTimestamp
+                
                 outMod = {
                     "name": mod["name"],
                     "desc": mod["summary"],
@@ -127,6 +134,8 @@ with tqdm() as pb:
         i += 1
         
         pb.update()
+
+outData["cursors"]["curse"] = maxModifiedTimestamp
 
 with open("data/index.json", "w", encoding="utf8") as fp:
     json.dump(outData, fp)
