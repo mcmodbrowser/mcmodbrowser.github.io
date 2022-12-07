@@ -91,11 +91,6 @@ with tqdm() as pb:
                 
                 addonType = addonClassIdToType(mod["classId"])
                 
-                if addonType == None:
-                    # Some addons have a classId of None or 4984 (a non-existent category).
-                    # These addons no longer exist, but the API still returns them.
-                    continue
-                
                 versions = {}
                 
                 for ver in mod["latestFilesIndexes"]:
