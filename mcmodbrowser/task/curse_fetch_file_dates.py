@@ -24,13 +24,14 @@ def run():
     
     if os.path.exists(outFile):
         mapping = loadJson(outFile)
-        i = (max([int(x) for x in mapping["data"].keys()]) // 1000000) + 0
+        i = (max([int(x) for x in mapping["data"].keys()]) // 100000) + 0
 
     emptyCombo = 0
     fetched = 0
 
     while True:
-        data = {"fileIds": [x * 1000 for x in list(range(i * 1000, (i+1) * 1000))]}
+        print("Fetching {}XXX00".format(i))
+        data = {"fileIds": [x * 100 for x in list(range(i * 1000, (i+1) * 1000))]}
         
         resp = requests.post("https://api.curseforge.com/v1/mods/files", json = data, headers = getCurseHeaders(curseToken))
         
@@ -40,8 +41,8 @@ def run():
             if not resp.json()['data']:
                 emptyCombo += 1
                 
-                if emptyCombo > 3:
-                    print("Got three empty responses in a row, terminating.")
+                if emptyCombo > 30:
+                    print("Got 30 empty responses in a row, terminating.")
                     break
             
             fetched += len(resp.json()['data'])

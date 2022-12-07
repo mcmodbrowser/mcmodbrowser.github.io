@@ -49,13 +49,13 @@ def run():
             x1 = points[-1]
             y1 = mapping[points[-1]]
         else:
-            prevp = (p // 1000) * 1000
+            prevp = (p // 100) * 100
             while prevp not in points:
-                prevp -= 1000
+                prevp -= 100
             
-            nextp = ((p // 1000) + 1) * 1000
+            nextp = ((p // 100) + 1) * 100
             while nextp not in points:
-                nextp += 1000
+                nextp += 100
             
             x0 = prevp
             y0 = mapping[prevp]
