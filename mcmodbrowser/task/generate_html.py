@@ -138,7 +138,7 @@ def run():
                     addonTypes=ADDON_TYPES,
                     addonTypeHumanizer=addonTypeHumanizer,
                     addonCount=len(addons),
-                    updateTime=humanizeIsoTimestamp(index['lastUpdated']),
+                    updateTime=humanizeIsoTimestamp(datetime.datetime.utcfromtimestamp(index['lastModified']).isoformat()),
                     selectedVersion=version,
                     isIndex = version == 'index' or addonType == 'index',
                     )
