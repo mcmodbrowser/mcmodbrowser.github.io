@@ -50,7 +50,7 @@ def run():
     if firstModModificationDate:
         index['cursors']['curse'] = firstModModificationDate
     
-    index['lastUpdated'] = datetime.datetime.utcnow().isoformat()
+    index['lastModified'] = datetime.datetime.utcnow().timestamp()
     
     print("Writing index...")
     

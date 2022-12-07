@@ -20,9 +20,13 @@ def getCurseToken():
 def humanizeIsoTimestamp(ts):
     return " ".join(ts.split("Z")[0].split(".")[0].split("T"))
 
-def dictGetWithCreate(d, key):
-    if key in d:
-        return d[key]
-    else:
-        d[key] = {}
-        return d[key]
+def dictGetWithCreate(d, *keys):
+    p = d
+    
+    for key in keys:
+        if key not in p:
+            p[key] = {}
+        
+        p = p[key]
+    
+    return p

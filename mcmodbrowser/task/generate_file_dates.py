@@ -15,11 +15,16 @@ def run():
     between them to approximate the modification date of any file ID.
     '''
 
-    i = 0
-
     curseToken = getCurseToken()
 
+    outFile = "data/fileDates.json"
+    
     mapping = {}
+    
+    if os.path.exists(outFile):
+        mapping = loadJson(outFile)
+    
+    i = max(mapping["data"].keys() // 1000) + 1 if mapping else 0
 
     emptyCombo = 0
 
@@ -46,4 +51,4 @@ def run():
         
         i += 1
 
-    writeJson({"data": mapping, "timestamp":  datetime.datetime.utcnow().isoformat()}, "data/fileDates.json")
+    writeJson({"data": mapping, "lastModified":  datetime.datetime.utcnow().timestamp()}, outFile)

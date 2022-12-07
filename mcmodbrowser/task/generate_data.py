@@ -1,4 +1,5 @@
 import requests
+import datetime
 
 from mcmodbrowser.index import *
 from mcmodbrowser.util import *
@@ -36,5 +37,7 @@ def run():
     
     
     dictGetWithCreate(index, "cursors")["curse"] = maxModifiedTimestamp
+
+    index['lastModified'] = datetime.datetime.utcnow().timestamp()
 
     saveIndex(index)

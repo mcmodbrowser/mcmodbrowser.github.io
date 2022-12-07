@@ -1,6 +1,6 @@
 import dateutil.parser as dp
 import os
-from mcmodbrowser.util import loadJson, writeJson
+from mcmodbrowser.util import *
 
 def getIndexPath():
     return "data/index.json"
@@ -68,10 +68,7 @@ def writeCurseModToIndex(index, mod):
     
     slug = mod["slug"]
     
-    if not addonType in index["data"]:
-        index["data"][addonType] = {}
-    if not slug in index["data"][addonType]:
-        index["data"][addonType][slug] = {}
+    dictGetWithCreate(index, "data", addonType, slug)["curse"] = outMod
     
     index["data"][addonType][slug]["curse"] = outMod
     
