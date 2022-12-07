@@ -5,7 +5,7 @@ from mcmodbrowser.model.curse import getCurseHeaders
 from mcmodbrowser.index import writeCurseModToIndex, getCurseModLastModifiedTimestamp
 
 def run():
-    '''Fetch recently updated mods and put them in the index.'''
+    '''Fetch recently updated mods and dump them.'''
     
     curseToken = getCurseToken()
 
@@ -16,7 +16,7 @@ def run():
         if resp.status_code == 200:
             assert "data" in resp.json()
             
-            writeJson(resp.json(), "data/search_test/{}.json".format(searchIndex))
+            writeJson(resp.json(), "data/dump/curse_new/{}.json".format(searchIndex))
         else:
             print("ERROR: got status code", resp.status_code)
             break
