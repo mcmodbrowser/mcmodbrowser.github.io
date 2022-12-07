@@ -12,6 +12,8 @@ def run():
     interruptSearch = False
     
     print("Fetching mods since", datetime.datetime.utcfromtimestamp(index['cursors']['curse']).isoformat())
+    
+    firstModModificationDate = None
 
     for searchIndex in range(0, 10000, 50):
         if interruptSearch:
@@ -35,9 +37,19 @@ def run():
                     
                 writeCurseModToIndex(index, mod)
                 
+                if firstModModificationDate == None:
+                    firstModModificationDate = lastModified
+                
                 first = False
         else:
             print("ERROR: got status code", resp.status_code)
             break
-        
+    
+    if firstModModificationDate:
+        index['cursors']['curse'] = firstModModificationDate
+    
+    index['lastUpdated'] = datetime.datetime.utcnow().isoformat()
+    
+    print("Writing index...")
+    
     writeJson(index, "data/index.json")

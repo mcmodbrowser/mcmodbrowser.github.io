@@ -6,6 +6,7 @@ import json
 import datetime
 from jinja2 import Template
 import os
+from mcmodbrowser.util import humanizeIsoTimestamp
 
 def run():
     
@@ -137,7 +138,7 @@ def run():
                     addonTypes=ADDON_TYPES,
                     addonTypeHumanizer=addonTypeHumanizer,
                     addonCount=len(addons),
-                    updateTime="????-??-??",
+                    updateTime=humanizeIsoTimestamp(index['lastUpdated']),
                     selectedVersion=version,
                     isIndex = version == 'index' or addonType == 'index',
                     )

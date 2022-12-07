@@ -14,3 +14,6 @@ def getCurseToken():
     if 'CURSEFORGE_TOKEN' not in os.environ:
         sys.exit("You must set the CURSEFORGE_TOKEN environmental variable to your CurseForge API key.")
     return os.environ['CURSEFORGE_TOKEN']
+
+def humanizeIsoTimestamp(ts):
+    return " ".join(ts.split("Z")[0].split(".")[0].split("T"))
