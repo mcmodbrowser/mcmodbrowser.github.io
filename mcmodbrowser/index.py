@@ -1,4 +1,9 @@
 import dateutil.parser as dp
+import os
+from mcmodbrowser.util import loadJson, writeJson
+
+def getIndexPath():
+    return "data/index.json"
 
 def addonClassIdToType(classId):
     m = {
@@ -74,3 +79,15 @@ def writeCurseModToIndex(index, mod):
 
 def getCurseModLastModifiedTimestamp(mod):
     return dp.isoparse(mod['dateModified']).timestamp()
+
+def getOrCreateIndex():
+    if os.path.exists(getIndexPath()):
+        return loadJson(getIndexPath())
+    else:
+        return {
+            "data": {},
+            "version": 0,
+        }
+
+def saveIndex(index):
+    writeJson(index, getIndexPath())

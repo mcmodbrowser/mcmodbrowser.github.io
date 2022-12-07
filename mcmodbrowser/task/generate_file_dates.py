@@ -1,18 +1,23 @@
 import requests
-import json
-import os
-import sys
 import dateutil.parser as dp
 import datetime
 
+from mcmodbrowser.index import *
+from mcmodbrowser.util import *
+from mcmodbrowser.model.curse import *
+
 def run():
+    '''Fetch fileId -> date mappings for use in interpolation.
+    
+    The Curse API doesn't tell us the modification dates of files when fetching
+    mod info in bulk, but it does tell us the file IDs which are allocated
+    sequentially. So we fetch the dates of some file IDs, and interpolate
+    between them to approximate the modification date of any file ID.
+    '''
 
     i = 0
 
-    if 'CURSEFORGE_TOKEN' not in os.environ:
-        sys.exit("You must set the CURSEFORGE_TOKEN environmental variable to your CurseForge API key.")
-
-    os.makedirs("data/response", exist_ok=True)
+    curseToken = getCurseToken()
 
     mapping = {}
 
@@ -21,7 +26,7 @@ def run():
     while True:
         data = {"fileIds": [x * 1000 for x in list(range(i * 1000, (i+1) * 1000))]}
         
-        resp = requests.post("https://api.curseforge.com/v1/mods/files", json = data, headers = {'Content-Type': 'application/json', 'Accept': 'application/json', 'x-api-key': os.environ['CURSEFORGE_TOKEN']})
+        resp = requests.post("https://api.curseforge.com/v1/mods/files", json = data, headers = getCurseHeaders(curseToken))
         
         if resp.status_code == 200:
             assert "data" in resp.json()
@@ -41,5 +46,4 @@ def run():
         
         i += 1
 
-    with open("data/fileDates.json".format(i), "w", encoding="utf8") as fp:
-        json.dump({"data": mapping, "timestamp":  datetime.datetime.utcnow().isoformat()}, fp)
+    writeJson({"data": mapping, "timestamp":  datetime.datetime.utcnow().isoformat()}, "data/fileDates.json")

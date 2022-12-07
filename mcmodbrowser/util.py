@@ -1,12 +1,14 @@
 import json
 import sys
 import os
+from pathlib import Path
 
 def loadJson(path):
     with open(path, "r", encoding="utf8") as fp:
         return json.load(fp)
 
 def writeJson(data, path):
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf8") as fp:
         json.dump(data, fp)
 
@@ -17,3 +19,10 @@ def getCurseToken():
 
 def humanizeIsoTimestamp(ts):
     return " ".join(ts.split("Z")[0].split(".")[0].split("T"))
+
+def dictGetWithCreate(d, key):
+    if key in d:
+        return d[key]
+    else:
+        d[key] = {}
+        return d[key]

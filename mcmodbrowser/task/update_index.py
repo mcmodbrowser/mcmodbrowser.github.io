@@ -5,6 +5,8 @@ from mcmodbrowser.model.curse import getCurseHeaders
 from mcmodbrowser.index import writeCurseModToIndex, getCurseModLastModifiedTimestamp
 
 def run():
+    '''Fetch recently updated mods and put them in the index.'''
+    
     curseToken = getCurseToken()
 
     index = loadJson("data/index.json")

@@ -9,7 +9,7 @@ import os
 from mcmodbrowser.util import humanizeIsoTimestamp
 
 def run():
-    
+    '''Generate HTMLs from index.'''
     if False in [os.path.exists(x) for x in [".git", "public_template"]]:
         sys.exit("You must run this script from the root directory of the repo.")
 
@@ -31,6 +31,7 @@ def run():
     fileDatesMappingKeys = sorted([int(x) for x in fileDatesMapping.keys()])
 
     def fileIdToApproximateEpoch(p):
+        '''Linearly interpolate between known fileId -> date mappings.'''
         mapping = fileDatesMapping
         points = fileDatesMappingKeys
         
@@ -59,8 +60,6 @@ def run():
             y0 = mapping[prevp]
             x1 = nextp
             y1 = mapping[nextp]
-            
-            #return mapping[prevp] + (mapping[nextp] - mapping[prevp]) * ((p - prevp) / (mapping[nextp] - mapping[prevp]))
         
         a = (y1 - y0) / (x1 - x0)
         b = y0 - a * x0
