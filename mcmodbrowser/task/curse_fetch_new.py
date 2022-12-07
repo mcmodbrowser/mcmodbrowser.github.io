@@ -16,6 +16,7 @@ def run():
     print("Fetching mods since", datetime.datetime.utcfromtimestamp(index['cursors']['curse']).isoformat())
     
     firstModModificationDate = None
+    fetched = 0
 
     for searchIndex in range(0, 10000, 50):
         if interruptSearch:
@@ -37,7 +38,8 @@ def run():
                     interruptSearch = True
                     break
                     
-                writeCurseModToIndex(index, mod)
+                if writeCurseModToIndex(index, mod):
+                    fetched += 1
                 
                 if firstModModificationDate == None:
                     firstModModificationDate = lastModified
@@ -51,6 +53,8 @@ def run():
         index['cursors']['curse'] = firstModModificationDate
     
     index['lastModified'] = datetime.datetime.utcnow().timestamp()
+    
+    print("Updated", fetched, "mods")
     
     print("Writing index...")
     
