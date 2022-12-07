@@ -10,6 +10,7 @@ from mcmodbrowser.util import humanizeIsoTimestamp
 
 def run():
     '''Generate HTMLs from index.'''
+
     if False in [os.path.exists(x) for x in [".git", "public_template"]]:
         sys.exit("You must run this script from the root directory of the repo.")
 
