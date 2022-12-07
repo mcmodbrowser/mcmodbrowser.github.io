@@ -169,7 +169,11 @@
 
 <script>
 	if(localStorage["style"]){
-		$("#style link").attr("href", "{{ rootPath }}" + localStorage["style"] + ".css");
+		setStyle(localStorage["style"]);
+	}
+	
+	function setStyle(style){
+		$("#style link").attr("href", "{{ rootPath }}" + style + ".css");
 	}
 	
 	var styles = ["dark", "gray", "gay", "boring", "stars"];
@@ -179,7 +183,7 @@
 			currentStyle = "dark";
 		}
 		var newStyle = styles[(styles.indexOf(currentStyle) + 1) % styles.length];
-		$("#style link").attr("href", newStyle + ".css");
+		setStyle(newStyle);
 		localStorage["style"] = newStyle;
 	}
 	
