@@ -163,7 +163,15 @@
 	{% endfor %}
 </p>
 </div>
+{% if selectedVersion != 'index' and selectedAddonType != 'index' %}
 <p id="updated">{{ addonCount }} {{ addonTypeHumanizer[selectedAddonType].lower() }}, updated at {{ updateTime }}. All times are UTC.</p>
+{% else %}
+<style>
+#sort {
+	display: none;
+}
+</style>
+{% endif %}
 
 <table id='sort'>
 <thead>

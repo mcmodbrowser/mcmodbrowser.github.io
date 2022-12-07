@@ -85,22 +85,29 @@ addonTypeHumanizer = {
     'worlds': 'Worlds',
     'modpacks': 'Modpacks',
     'customizations': 'Customizations',
-    'addons': 'Addons'
+    'addons': 'Addons',
+    'index': 'Mod Browser'
 }
 VERSIONS = ['1.0.0', '1.0.1', '1.1', '1.2.5', '1.3.2', '1.4.7', '1.5.2', '1.6.4', '1.7.10', '1.8.9', '1.9.4', '1.10.2', '1.11.2', '1.12.2', '1.13.2', '1.14.4', '1.15.2', '1.16.5', '1.17.1', '1.18.2']
 MAIN_VERSIONS = ['1.2.5', '1.4.7', '1.6.4', '1.7.10', '1.8.9', '1.12.2', '1.16.5', '1.18.2']
 
-for addonType in ADDON_TYPES:
-    for version in VERSIONS:
+for addonType in ADDON_TYPES + ["index"]:
+    for version in VERSIONS + ["index"]:
         print("Generating", addonType, "/", version)
-        addons = list(createTemplateEntries(index['data'].get(addonType) or [], version))
         
-        os.makedirs("public/" + addonType, exist_ok=True)
+        isIndex = addonType == "index" and version == "index"
         
-        with open("public/" + addonType + "/" + version + ".html", "w", encoding="utf8") as fp:
+        addons = list(createTemplateEntries(index['data'].get(addonType) or [], version)) if not isIndex else []
+        
+        if not isIndex:
+            os.makedirs("public/" + addonType, exist_ok=True)
+        
+        out = "public/" + addonType + "/" + version + ".html" if not isIndex else "public/index.html"
+        
+        with open(out, "w", encoding="utf8") as fp:
             fp.write(template.render(
                 addons=addons,
-                rootPath="../",
+                rootPath="../" if not isIndex else "./",
                 versions=VERSIONS,
                 mainVersions=MAIN_VERSIONS,
                 altVersions=[x for x in VERSIONS if x not in MAIN_VERSIONS],
@@ -109,5 +116,7 @@ for addonType in ADDON_TYPES:
                 addonTypeHumanizer=addonTypeHumanizer,
                 addonCount=len(addons),
                 updateTime="????-??-??",
-                selectedVersion=version)
+                selectedVersion=version,
+                isIndex = version == 'index' or addonType == 'index',
+                )
             )
