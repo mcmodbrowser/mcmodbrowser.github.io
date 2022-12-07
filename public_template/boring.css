@@ -1,11 +1,11 @@
 th, td {
 	      padding: 5px 10px;
-      border: 1px solid #aaa;
+      border: 1px solid #D0D7DE;
 
 }
 
 th {
-	background-color: #eee;
+	background-color: #ffffff;
 }
 
 #msg {
@@ -14,7 +14,7 @@ th {
 
 /* zebra-striping seems to really slow down Opera sometimes */
 tr:nth-child(even) {
-  background-color: #f9f9f7;
+  background-color: #F6F8FA;
 }
 tr:nth-child(odd) {
   background-color: #ffffff;
@@ -25,5 +25,5 @@ tr:nth-child(odd) {
 }
 
 tr:hover {
-	   background-color: lightgrey;
+	   background-color: #DEE2E8;
 }

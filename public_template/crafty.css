@@ -1,0 +1,48 @@
+th, td {
+  padding: 9px 10px; 
+}
+
+body {
+	color: #E0D0D0;
+	background-image: url("mc_bg_main.png");
+	background-repeat: repeat;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #292929;;
+}
+tbody tr:hover {
+	background-color: #333333;
+}
+
+.active {
+	color: white;
+}
+
+a {
+	color: #aaf;
+}
+
+#msg {
+	color: #FFF600;
+}
+
+#title {
+	color: white;
+}
+
+.normal {
+	display: none;
+}
+
+.craftyBlock {
+	display: block !important;
+}
+
+.craftyInlineBlock {
+	display: inline-block !important;
+}
+
+#title {
+	font-size: 1.5em !important;
+}

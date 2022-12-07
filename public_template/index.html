@@ -111,15 +111,35 @@
 		top: 0;
 		padding: 20px;
 	}
+	
+	.craftyInlineBlock {
+		display: none;
+	}
+	#headerBg {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		height: 100px;
+		width: 100%;
+		background-image: url("{{ rootPath }}mc_bg_top_edited.png");
+		display: none;
+		z-index: -10;
+	}
+	
+	#header p {
+		margin-top: 12px;
+		margin-bottom: 12px;
+	}
 </style>
 
+<div id="headerBg" class="craftyBlock"></div>
 
-
-<span class="title" id="title">Minecraft {{ addonTypeHumanizer[selectedAddonType].lower() }}</span>
+<div id="header">
+<span class="title" id="title"><span class="normal">Minecraft</span><img class="craftyInlineBlock" height=28px src="{{ rootPath }}mc_logo.png"></img> {{ addonTypeHumanizer[selectedAddonType].lower() }}</span>
 <input id="trigger" type="checkbox">
 <label class="for" for="trigger">for</label>
 <div id="forEllipse">. . .</div>
-<br>
+<br id="titleBreak">
 {% for version in versions %}
 <div class="verDiv {% if version not in mainVersions %} altVer{% endif %}">
 	{% if version != selectedVersion %}
@@ -142,6 +162,7 @@
 	{% if not loop.last %}<span class="sep">|</span>{% endif %}
 	{% endfor %}
 </p>
+</div>
 <p id="updated">{{ addonCount }} {{ addonTypeHumanizer[selectedAddonType].lower() }}, updated at {{ updateTime }}. All times are UTC.</p>
 
 <table id='sort'>
@@ -176,7 +197,7 @@
 		$("#style link").attr("href", "{{ rootPath }}" + style + ".css");
 	}
 	
-	var styles = ["dark", "gray", "gay", "boring", "stars"];
+	var styles = ["dark", "gray", "gay", "boring", "stars", "crafty"];
 	function toggleStyle(){
 		currentStyle = localStorage["style"];
 		if(!currentStyle){
