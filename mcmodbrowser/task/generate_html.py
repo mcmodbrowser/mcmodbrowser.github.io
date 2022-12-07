@@ -24,49 +24,79 @@ def run():
             return json.load(fp)
 
     index = loadJson("data/index.json")
-    fileDates = loadJson("data/fileDates.json")
-
-    fileDatesMapping = {}
-    for id, date in fileDates['data'].items():
-        fileDatesMapping[int(id)] = date
-    fileDatesMappingKeys = sorted([int(x) for x in fileDatesMapping.keys()])
-
-    def fileIdToApproximateEpoch(p):
-        '''Linearly interpolate between known fileId -> date mappings.'''
-        mapping = fileDatesMapping
-        points = fileDatesMappingKeys
-        
-        x0, y0, x1, y1 = (None, None, None, None)
-        
-        if p < points[0]:
-            x0 = points[0]
-            y0 = mapping[points[0]]
-            x1 = points[1]
-            y1 = mapping[points[1]]
-        elif p > points[-1]:
-            x0 = points[-2]
-            y0 = mapping[points[-2]]
-            x1 = points[-1]
-            y1 = mapping[points[-1]]
-        else:
-            prevp = (p // 100) * 100
-            while prevp not in points:
-                prevp -= 100
-            
-            nextp = ((p // 100) + 1) * 100
-            while nextp not in points:
-                nextp += 100
-            
-            x0 = prevp
-            y0 = mapping[prevp]
-            x1 = nextp
-            y1 = mapping[nextp]
-        
+    
+    def lerp_line(x0, y0, x1, y1, x):
         a = (y1 - y0) / (x1 - x0)
         b = y0 - a * x0
         # a*x0+b=y0 => b=y0-a*x0
         
-        return a * p + b
+        return a * x + b
+    
+    FILE_ID_STEP = 100
+    
+    def loadFileDates():
+        fileDates = loadJson("data/fileDates.json")    
+        
+        fileDatesMapping = {}
+        for id, date in fileDates['data'].items():
+            fileDatesMapping[int(id)] = date
+        fileDatesMappingKeys = sorted([int(x) for x in fileDatesMapping.keys()])
+        
+        xs = list(range(fileDatesMappingKeys[0], fileDatesMappingKeys[-1] + FILE_ID_STEP, FILE_ID_STEP))
+        ys = [0] * len(xs)
+        
+        gapStart = -1
+        
+        for i in range(len(xs)):
+            x = xs[i]
+            
+            if x in fileDatesMapping:
+                ys[i] = fileDatesMapping[x]
+                
+                if gapStart != -1:
+                    # there is a gap from gapStart to i-1 (both inclusive)
+                    
+                    x0 = xs[gapStart - 1]
+                    y0 = ys[gapStart - 1]
+                    x1 = xs[i]
+                    y1 = ys[i]
+                    
+                    for gapI in range(gapStart, i):
+                        ys[gapI] = lerp_line(x0, y0, x1, y1, xs[gapI])
+                
+                gapStart = -1
+            elif gapStart == -1:
+                gapStart = i
+        
+        return xs, ys
+        
+    fileDatesXs, fileDatesYs = loadFileDates()
+    
+
+    def fileIdToApproximateEpoch(p):
+        '''Linearly interpolate between known fileId -> date mappings.'''
+        x0, y0, x1, y1 = (None, None, None, None)
+        
+        xs = fileDatesXs
+        ys = fileDatesYs
+        
+        if p < xs[0]:
+            x0 = xs[0]
+            y0 = ys[0]
+            x1 = xs[1]
+            y1 = ys[1]
+        elif p > xs[-1]:
+            x0 = xs[-2]
+            y0 = ys[-2]
+            x1 = xs[-1]
+            y1 = ys[-1]
+        else:
+            x0 = (p // FILE_ID_STEP) * FILE_ID_STEP
+            y0 = ys[(x0 - xs[0]) // FILE_ID_STEP]
+            x1 = ((p // FILE_ID_STEP) + 1) * FILE_ID_STEP
+            y1 = ys[(x1 - xs[0]) // FILE_ID_STEP]
+        
+        return lerp_line(x0, y0, x1, y1,p)
             
     def fileIdToApproximateDate(p):
         return datetime.datetime.utcfromtimestamp(fileIdToApproximateEpoch(p)).isoformat().split("T")[0]
