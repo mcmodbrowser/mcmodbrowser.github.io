@@ -18,7 +18,9 @@ def getCurseToken():
     return os.environ['CURSEFORGE_TOKEN']
 
 def humanizeIsoTimestamp(ts):
-    return " ".join(ts.split("Z")[0].split(".")[0].split("T"))
+    x = " ".join(ts.split("Z")[0].split(".")[0].split("T"))
+    x = x[:x.rindex(":")]
+    return x
 
 def dictGetWithCreate(d, *keys):
     p = d

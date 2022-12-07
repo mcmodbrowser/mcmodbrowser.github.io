@@ -99,7 +99,7 @@ def run():
         return lerp_line(x0, y0, x1, y1,p)
             
     def fileIdToApproximateDate(p):
-        return datetime.datetime.utcfromtimestamp(fileIdToApproximateEpoch(p)).isoformat().split("T")[0]
+        return humanizeIsoTimestamp(datetime.datetime.utcfromtimestamp(fileIdToApproximateEpoch(p)).isoformat())
 
     def createTemplateEntries(addons, version):
         result = []
@@ -119,7 +119,7 @@ def run():
                 'authors': ', '.join(addon['authors']),
                 'downloads': addon['downloads'],
                 'downloadsFormatted': addon['downloads'],
-                'lastModifiedDefault': fileIdToApproximateDate(max(x['fileId'] for x in addon['versions'][version].values()))
+                'lastModifiedDefault': fileIdToApproximateDate(max(x['fileId'] for x in addon['versions'][version].values())).replace(" ", "&nbsp")
             })
         
         result = reversed(sorted(result, key=lambda addon: addon['lastModifiedDefault']))
