@@ -45,8 +45,36 @@
 		cursor: pointer;
 		text-decoration: none;
 	}
+	.verDiv {
+		display: inline;
+	}
+	.altVer {
+		display: none;
+	}
+	#forEllipse {
+		display: none;
+	}
+	.for:hover {
+		cursor: zoom-in;
+	}
+	#trigger:checked ~ .for:hover {
+		cursor: zoom-out;
+	}
+	#trigger:checked ~ .altVer {
+		display: inline;
+	}
+	#trigger {
+		display: none;
+	}
+	label {
+		user-select: none;
+	}
 	.active {
 		font-weight: bold;
+	}
+	.sep {
+		opacity: 30%;
+		user-select: none;
 	}
 
 	
@@ -57,10 +85,6 @@
 	.for {
 		padding-left: 10px;
 		padding-right: 10px;
-	}
-	
-	#versions {
-		display: inline;
 	}
 	
 	#msg {
@@ -85,17 +109,21 @@
 
 
 
-<span class="title" id="title">Minecraft mods</span> <span class="for">for</span>
-<div id="versions">
-	{% for version in versions %}
-	<a class=ver href={{ rootPath }}{{ addonType }}/{{ version }}.html>{{ version }}</a>
-	{% endfor %}
+<span class="title" id="title">Minecraft {{ addonTypeHumanizer[addonType].lower() }}</span>
+<input id="trigger" type="checkbox">
+<label class="for" for="trigger">for</label>
+<div id="forEllipse">. . .</div>
+<br>
+{% for version in versions %}
+<div class="verDiv {% if version not in mainVersions %} altVer{% endif %}">
+	<a class="ver" href={{ rootPath }}{{ addonType }}/{{ version }}.html>{{ version }}</a>{% if not loop.last %}<span class="sep">|</span>{% endif %}
 </div>
+{% endfor %}
 <p id="msg">&nbsp</p>
 <a id="swatch" onclick="toggleStyle()">Toggle style</a>
 <p id="addonTypes">
 	{% for addonType in addonTypes %}
-	<a class=ver href={{ rootPath }}{{ addonType }}/{{ version }}.html>{{ addonTypeHumanizer[addonType] }}</a>
+	<a class=ver href={{ rootPath }}{{ addonType }}/{{ version }}.html>{{ addonTypeHumanizer[addonType] }}</a>{% if not loop.last %}<span class="sep">|</span>{% endif %}
 	{% endfor %}
 </p>
 <p id="updated">{{ addonCount }} {{ addonTypeHumanizer[addonType].lower() }}, updated at {{ updateTime }}. All times are UTC.</p>
