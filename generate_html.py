@@ -77,11 +77,11 @@ def createTemplateEntries(addons, version):
 TEMPLATE = open('public/index.html', "r", encoding="utf8").read()
 template = Template(TEMPLATE)
 
-ADDON_TYPES = ['bukkitPlugins', 'mods', 'resourcePacks', 'worlds', 'modpacks', 'customizations', 'addons']
+ADDON_TYPES = ['mods', 'resourcePacks', 'modpacks', 'worlds']
 addonTypeHumanizer = {
-    'bukkitPlugins': 'Bukkit plugins',
+    'bukkitPlugins': 'Bukkit Plugins',
     'mods': 'Mods',
-    'resourcePacks': 'Resource packs',
+    'resourcePacks': 'Resource Packs',
     'worlds': 'Worlds',
     'modpacks': 'Modpacks',
     'customizations': 'Customizations',
