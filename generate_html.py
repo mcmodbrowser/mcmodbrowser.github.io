@@ -104,10 +104,10 @@ for addonType in ADDON_TYPES:
                 versions=VERSIONS,
                 mainVersions=MAIN_VERSIONS,
                 altVersions=[x for x in VERSIONS if x not in MAIN_VERSIONS],
-                addonType=addonType,
+                selectedAddonType=addonType,
                 addonTypes=ADDON_TYPES,
                 addonTypeHumanizer=addonTypeHumanizer,
                 addonCount=len(addons),
                 updateTime="????-??-??",
-                version=version)
+                selectedVersion=version)
             )

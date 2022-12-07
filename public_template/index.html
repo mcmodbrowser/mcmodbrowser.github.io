@@ -41,15 +41,21 @@
 	}
 	
 	.ver {
-		padding-right: 10px;
-		cursor: pointer;
+		padding-right: 5px;
+		padding-left: 5px;
 		text-decoration: none;
+	}
+	a .ver {
+		cursor: pointer;
 	}
 	.verDiv {
 		display: inline;
 	}
 	.altVer {
 		display: none;
+	}
+	.selectedVer {
+		display: inline;
 	}
 	#forEllipse {
 		display: none;
@@ -109,24 +115,34 @@
 
 
 
-<span class="title" id="title">Minecraft {{ addonTypeHumanizer[addonType].lower() }}</span>
+<span class="title" id="title">Minecraft {{ addonTypeHumanizer[selectedAddonType].lower() }}</span>
 <input id="trigger" type="checkbox">
 <label class="for" for="trigger">for</label>
 <div id="forEllipse">. . .</div>
 <br>
 {% for version in versions %}
 <div class="verDiv {% if version not in mainVersions %} altVer{% endif %}">
-	<a class="ver" href={{ rootPath }}{{ addonType }}/{{ version }}.html>{{ version }}</a>{% if not loop.last %}<span class="sep">|</span>{% endif %}
+	{% if version != selectedVersion %}
+	<a class="ver" href={{ rootPath }}{{ selectedAddonType }}/{{ version }}.html>{{ version }}</a>
+	{% else %}
+	<span class="ver active">{{ version }}</span>
+	{% endif %}
+	{% if not loop.last %}<span class="sep">|</span>{% endif %}
 </div>
 {% endfor %}
 <p id="msg">&nbsp</p>
 <a id="swatch" onclick="toggleStyle()">Toggle style</a>
 <p id="addonTypes">
 	{% for addonType in addonTypes %}
-	<a class=ver href={{ rootPath }}{{ addonType }}/{{ version }}.html>{{ addonTypeHumanizer[addonType] }}</a>{% if not loop.last %}<span class="sep">|</span>{% endif %}
+	{% if addonType != selectedAddonType %}
+	<a class="ver" href="{{ rootPath }}{{ addonType }}/{{ selectedVersion }}.html">{{ addonTypeHumanizer[addonType] }}</a>
+	{% else %}
+	<span class="ver active">{{ addonTypeHumanizer[addonType] }}</span>
+	{% endif %}
+	{% if not loop.last %}<span class="sep">|</span>{% endif %}
 	{% endfor %}
 </p>
-<p id="updated">{{ addonCount }} {{ addonTypeHumanizer[addonType].lower() }}, updated at {{ updateTime }}. All times are UTC.</p>
+<p id="updated">{{ addonCount }} {{ addonTypeHumanizer[selectedAddonType].lower() }}, updated at {{ updateTime }}. All times are UTC.</p>
 
 <table id='sort'>
 <thead>
