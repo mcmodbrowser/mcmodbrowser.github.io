@@ -147,7 +147,6 @@
 <table id='sort'>
 <thead>
 	<tr>
-		<th data-sort="string">CF</th>
 		<th data-sort="string">Name</th>
 		<th data-sort="string">Description</th>
 		<th data-sort="string">Author(s)</th>
@@ -158,8 +157,7 @@
 <tbody id="tbody">
 	{% for addon in addons %}
 	<tr>
-		<td><a href={{ addon.url }}>CF</a></td>
-		<td>{{ addon.name }}</td>
+		<td><a href={{ addon.url }}>{{ addon.name }}</a></td>
 		<td>{{ addon.description}}</td>
 		<td>{{ addon.authors }}</td>
 		<td data-sort-value="{{ addon.downloads }}" class="num">{{ addon.downloadsFormatted }}</td>
