@@ -26,232 +26,242 @@
 </head>
 <body>
 
-<style type="text/css">
-	body {
-		font-family: "Ubuntu", "Trebuchet MS", sans-serif;
-	}
-	table {
-		border-collapse: collapse;
-		margin: 1em auto;
-	}
-	
-	th[data-sort]{
-		cursor:pointer;
-	}
-
-	/* just some random additional styles for a more real-world situation */
-	#msg {
-		text-align: center;
-	}
-	
-	.disabled {
-		opacity: 0.5;
-	}
-	
-	.ver {
-		padding-right: 5px;
-		padding-left: 5px;
-		text-decoration: none;
-	}
-	a .ver {
-		cursor: pointer;
-	}
-	.verDiv {
-		display: inline;
-	}
-	.altVer {
-		display: none;
-	}
-	.selectedVer {
-		display: inline;
-	}
-	#forEllipse {
-		display: none;
-	}
-	.for:hover {
-		cursor: zoom-in;
-	}
-	#trigger:checked ~ .for:hover {
-		cursor: zoom-out;
-	}
-	#trigger:checked ~ .altVer {
-		display: inline;
-	}
-	#trigger {
-		display: none;
-	}
-	label {
-		user-select: none;
-	}
-	.active {
-		font-weight: bold;
-	}
-	.sep {
-		opacity: 30%;
-		user-select: none;
-	}
-
-	
-	#title {
-		font-size: 2em;
-	}
-	
-	.for {
-		padding-left: 10px;
-		padding-right: 10px;
-	}
-	
-	#msg {
-		display: inline;
-	}
-	td.num {
-		text-align: right;
-	}
-	
-	a {
-		text-decoration: none;
-		cursor: pointer;
-	}
-	
-	#swatch {
-		position: absolute;
-		right: 0;
-		top: 0;
-		padding-top: 16px;
-		padding-right: 16px;
-	}
-	
-	.craftyInlineBlock {
-		display: none;
-	}
-	#headerBg {
-		position: absolute;
-		top: 0px;
-		left: 0px;
-		height: 100px;
-		width: 100%;
-		background-image: url("{{ rootPath }}mc_bg_top_edited.png");
-		display: none;
-		z-index: -10;
-	}
-	
-	#header p {
-		margin-top: 12px;
-		margin-bottom: 12px;
-	}
-</style>
-
-<div id="headerBg" class="craftyBlock"></div>
-
-<div id="header">
-<span class="title" id="title"><span class="normal">Minecraft</span><img class="craftyInlineBlock" height=28px src="{{ rootPath }}mc_logo.png"></img> {{ addonTypeHumanizer[selectedAddonType].lower() }}</span>
-<input id="trigger" type="checkbox">
-<label class="for" for="trigger">for</label>
-<div id="forEllipse">. . .</div>
-<br id="titleBreak">
-{% for version in versions %}
-<div class="verDiv {% if version not in mainVersions %} altVer{% endif %}">
-	{% if version != selectedVersion %}
-	<a class="ver" href={{ rootPath }}{{ selectedAddonType }}/{{ version }}.html>{{ version }}</a>
-	{% else %}
-	<span class="ver active">{{ version }}</span>
-	{% endif %}
-	{% if not loop.last %}<span class="sep">|</span>{% endif %}
-</div>
-{% endfor %}
-<p id="msg">&nbsp</p>
-<a id="swatch" onclick="toggleStyle()">Toggle style</a>
-<p id="addonTypes">
-	{% for addonType in addonTypes %}
-	{% if addonType != selectedAddonType %}
-	<a class="ver" href="{{ rootPath }}{{ addonType }}/{{ selectedVersion }}.html">{{ addonTypeHumanizer[addonType] }}</a>
-	{% else %}
-	<span class="ver active">{{ addonTypeHumanizer[addonType] }}</span>
-	{% endif %}
-	{% if not loop.last %}<span class="sep">|</span>{% endif %}
-	{% endfor %}
-</p>
-</div>
-{% if selectedVersion != 'index' and selectedAddonType != 'index' %}
-<p id="updated">{{ addonCount }} {{ addonTypeHumanizer[selectedAddonType].lower() }}, updated at {{ updateTime }}. All times are UTC.</p>
-{% else %}
-<style>
-#sort {
-	display: none;
-}
-#disclaimer {
-	display: none;
-}
-</style>
-{% endif %}
-
-<table id='sort'>
-<thead>
-	<tr>
-		<th data-sort="string">Name</th>
-		<th data-sort="string">Description</th>
-		<th data-sort="string">Author(s)</th>
-		<th data-sort="int">Download count</th>
-		<th data-sort="string">Last modified</th>
-	</tr>
-</thead>
-<tbody id="tbody">
-	{% for addon in addons %}
-	<tr>
-		<td><a href={{ addon.url }}>{{ addon.name }}</a></td>
-		<td>{{ addon.description}}</td>
-		<td>{{ addon.authors }}</td>
-		<td data-sort-value="{{ addon.downloads }}" class="num">{{ addon.downloadsFormatted }}</td>
-		<td>{{ addon.lastModifiedDefault }}</td>
-	</tr>
-	{% endfor %}
-</tbody>
-</table>
-
-<p id="disclaimer">Modification dates are approximate. Data provided by the CurseForge API.</p>
-
-<script>
-	function toggleStyle(){
-		currentStyle = localStorage["style"];
-		if(!currentStyle || !styles.includes(currentStyle)){
-			currentStyle = styles[0];
+	<style type="text/css">
+		body {
+			font-family: "Ubuntu", "Trebuchet MS", sans-serif;
+			margin: 0px;
 		}
-		var newStyle = styles[(styles.indexOf(currentStyle) + 1) % styles.length];
-		setStyle(newStyle);
-		localStorage["style"] = newStyle;
-	}
-	
-	function doThing(){
-		var table = $("#sort").stupidtable();
-
-		table.on("beforetablesort", function (event, data) {
-			// Apply a "disabled" look to the table while sorting.
-			// Using addClass for "testing" as it takes slightly longer to render.
-			$("#msg").text("Sorting...");
-			$("table").addClass("disabled");
-		});
-
-		table.on("aftertablesort", function (event, data) {
-			// Reset loading message.
-			$("#msg").html("&nbsp;");
-			$("table").removeClass("disabled");
-
-			var th = $(this).find("th");
-			th.find(".arrow").remove();
-			var dir = $.fn.stupidtable.dir;
-
-			var arrow = data.direction === dir.ASC ? "&uarr;" : "&darr;";
-			th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
-		});
-	}
-	
-	$(document).ready(function(){
-		$.ajaxSetup({ cache: false });
+		table {
+			border-collapse: collapse;
+			margin: 1em auto;
+		}
 		
-		doThing();
-	});
-</script>
+		th[data-sort]{
+			cursor:pointer;
+		}
 
-</div>
-</body>
+		/* just some random additional styles for a more real-world situation */
+		#msg {
+			text-align: center;
+		}
+		
+		.disabled {
+			opacity: 0.5;
+		}
+		
+		.ver {
+			padding-right: 5px;
+			padding-left: 5px;
+			text-decoration: none;
+		}
+		a .ver {
+			cursor: pointer;
+		}
+		.verDiv {
+			display: inline;
+		}
+		.altVer {
+			display: none;
+		}
+		.selectedVer {
+			display: inline;
+		}
+		#forEllipse {
+			display: none;
+		}
+		.for:hover {
+			cursor: zoom-in;
+		}
+		#trigger:checked ~ .for:hover {
+			cursor: zoom-out;
+		}
+		#trigger:checked ~ .altVer {
+			display: inline;
+		}
+		#trigger {
+			display: none;
+		}
+		label {
+			user-select: none;
+		}
+		.active {
+			font-weight: bold;
+		}
+		.sep {
+			opacity: 30%;
+			user-select: none;
+		}
+
+		
+		#title {
+			font-size: 2em;
+		}
+		
+		.for {
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		
+		#msg {
+			display: inline;
+		}
+		td.num {
+			text-align: right;
+		}
+		
+		a {
+			text-decoration: none;
+			cursor: pointer;
+		}
+		
+		#swatch {
+			position: absolute;
+			right: 0;
+			top: 0;
+			padding-top: 16px;
+			padding-right: 16px;
+		}
+		
+		.craftyInlineBlock {
+			display: none;
+		}
+		#headerBg {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			height: 100px;
+			width: 100%;
+			background-image: url("{{ rootPath }}mc_bg_top_edited.png");
+			display: none;
+			z-index: -10;
+		}
+		
+		#header {
+			margin: 0px;
+			padding: 8px;
+		}
+		
+		#content {
+			margin: 8px;
+		}
+		
+		#addonTypes {
+			margin-bottom: 0px;
+		}
+	</style>
+
+	<!--div id="headerBg" class="craftyBlock"></div-->
+
+	<div id="header">
+		<span class="title" id="title"><span class="normal">Minecraft</span><img class="craftyInlineBlock" height=28px src="{{ rootPath }}mc_logo.png"></img> {{ addonTypeHumanizer[selectedAddonType].lower() }}</span>
+		<input id="trigger" type="checkbox">
+		<label class="for" for="trigger">for</label>
+		<div id="forEllipse">. . .</div>
+		<br id="titleBreak">
+		{% for version in versions %}
+		<div class="verDiv {% if version not in mainVersions %} altVer{% endif %}">
+			{% if version != selectedVersion %}
+			<a class="ver" href={{ rootPath }}{{ selectedAddonType }}/{{ version }}.html>{{ version }}</a>
+			{% else %}
+			<span class="ver active">{{ version }}</span>
+			{% endif %}
+			{% if not loop.last %}<span class="sep">|</span>{% endif %}
+		</div>
+		{% endfor %}
+		<p id="msg">&nbsp</p>
+		<a id="swatch" onclick="toggleStyle()">Toggle style</a>
+		<p id="addonTypes">
+			{% for addonType in addonTypes %}
+			{% if addonType != selectedAddonType %}
+			<a class="ver" href="{{ rootPath }}{{ addonType }}/{{ selectedVersion }}.html">{{ addonTypeHumanizer[addonType] }}</a>
+			{% else %}
+			<span class="ver active">{{ addonTypeHumanizer[addonType] }}</span>
+			{% endif %}
+			{% if not loop.last %}<span class="sep">|</span>{% endif %}
+			{% endfor %}
+		</p>
+	</div>
+	<div id="content">
+		{% if selectedVersion != 'index' and selectedAddonType != 'index' %}
+		<p id="updated">{{ addonCount }} {{ addonTypeHumanizer[selectedAddonType].lower() }}, updated at {{ updateTime }}. All times are UTC.</p>
+		{% else %}
+		<style>
+		#sort {
+			display: none;
+		}
+		#disclaimer {
+			display: none;
+		}
+		</style>
+		{% endif %}
+
+		<table id='sort'>
+		<thead>
+			<tr>
+				<th data-sort="string">Name</th>
+				<th data-sort="string">Description</th>
+				<th data-sort="string">Author(s)</th>
+				<th data-sort="int">Download count</th>
+				<th data-sort="string">Last modified</th>
+			</tr>
+		</thead>
+		<tbody id="tbody">
+			{% for addon in addons %}
+			<tr>
+				<td><a href={{ addon.url }}>{{ addon.name }}</a></td>
+				<td>{{ addon.description}}</td>
+				<td>{{ addon.authors }}</td>
+				<td data-sort-value="{{ addon.downloads }}" class="num">{{ addon.downloadsFormatted }}</td>
+				<td>{{ addon.lastModifiedDefault }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+		</table>
+
+		<p id="disclaimer">Modification dates are approximate. Data provided by the CurseForge API.</p>
+	</div>
+
+	<script>
+		function toggleStyle(){
+			currentStyle = localStorage["style"];
+			if(!currentStyle || !styles.includes(currentStyle)){
+				currentStyle = styles[0];
+			}
+			var newStyle = styles[(styles.indexOf(currentStyle) + 1) % styles.length];
+			setStyle(newStyle);
+			localStorage["style"] = newStyle;
+		}
+		
+		function doThing(){
+			var table = $("#sort").stupidtable();
+
+			table.on("beforetablesort", function (event, data) {
+				// Apply a "disabled" look to the table while sorting.
+				// Using addClass for "testing" as it takes slightly longer to render.
+				$("#msg").text("Sorting...");
+				$("table").addClass("disabled");
+			});
+
+			table.on("aftertablesort", function (event, data) {
+				// Reset loading message.
+				$("#msg").html("&nbsp;");
+				$("table").removeClass("disabled");
+
+				var th = $(this).find("th");
+				th.find(".arrow").remove();
+				var dir = $.fn.stupidtable.dir;
+
+				var arrow = data.direction === dir.ASC ? "&uarr;" : "&darr;";
+				th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
+			});
+		}
+		
+		$(document).ready(function(){
+			$.ajaxSetup({ cache: false });
+			
+			doThing();
+		});
+	</script>
+
+	</body>
 </html>

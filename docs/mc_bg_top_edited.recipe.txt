@@ -1,0 +1,8 @@
+created using paint.net
+
+layer 0:
+	dirt.png, upscaled to 4x, tiled 3 times vertically
+layer 1:
+	all black. layer opacity: 127
+layer 2:
+	black to transparent gradient from Y=184 to Y=73. layer opacity: 110
