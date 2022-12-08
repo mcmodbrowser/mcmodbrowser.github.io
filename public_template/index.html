@@ -12,7 +12,7 @@
 		document.getElementById("style").setAttribute("href", "{{ rootPath }}" + style + ".css");
 	}
 	</script>
-	<title>Minecraft {{ addonTypeHumanizer[selectedAddonType] }} for {{ selectedVersion }} - mcmodbrowser</title>
+	<title>{% if selectedVersion != 'index' or selectedAddonType != 'index' %} Minecraft {{ addonTypeHumanizer[selectedAddonType] }} for {{ selectedVersion }} - mcmodbrowser {% else %} Minecraft Mod Browser {% endif %}</title>
 	<meta charset='utf-8' />
 	<link href='http://tristen.ca/tablesort/tablesort.css' rel='stylesheet'>
 	<script src='http://tristen.ca/tablesort/src/tablesort.js'></script>
@@ -150,8 +150,6 @@
 		}
 	</style>
 
-	<!--div id="headerBg" class="craftyBlock"></div-->
-
 	<div id="header">
 		<span class="title" id="title"><span class="normal">Minecraft</span><img class="craftyInlineBlock" height=28px src="{{ rootPath }}mc_logo.png"></img> {{ addonTypeHumanizer[selectedAddonType].lower() }}</span>
 		<input id="trigger" type="checkbox">
@@ -161,9 +159,9 @@
 		{% for version in versions %}
 		<div class="verDiv {% if version not in mainVersions %} altVer{% endif %}">
 			{% if version != selectedVersion %}
-			<a class="ver" href={{ rootPath }}{{ selectedAddonType }}/{{ version }}.html>{{ version }}</a>
+			<a class="ver" href="{{ rootPath }}{{ selectedAddonType }}/{{ version }}.html">{{ version }}</a>
 			{% else %}
-			<span class="ver active">{{ version }}</span>
+			<a class="ver active" href="{{ rootPath + (selectedAddonType + '/index' if selectedAddonType != 'index' else 'index') }}.html">{{ version }}</a>
 			{% endif %}
 			{% if not loop.last %}<span class="sep">|</span>{% endif %}
 		</div>
@@ -175,7 +173,7 @@
 			{% if addonType != selectedAddonType %}
 			<a class="ver" href="{{ rootPath }}{{ addonType }}/{{ selectedVersion }}.html">{{ addonTypeHumanizer[addonType] }}</a>
 			{% else %}
-			<span class="ver active">{{ addonTypeHumanizer[addonType] }}</span>
+			<a class="ver active" href="{{ rootPath + ('index/' + selectedVersion if selectedVersion != 'index' else 'index') }}.html">{{ addonTypeHumanizer[addonType] }}</a>
 			{% endif %}
 			{% if not loop.last %}<span class="sep">|</span>{% endif %}
 			{% endfor %}
@@ -183,7 +181,7 @@
 	</div>
 	<div id="content">
 		{% if True or (selectedVersion != 'index' and selectedAddonType != 'index') %}
-		<p id="updated">{{ addonCount }} {{ addonTypeHumanizer[selectedAddonType].lower() }}, updated at {{ updateTime }}. All times are UTC.</p>
+		<p id="updated">{% if isIndex %} Showing {% endif %} {{ addonCount }} {% if isIndex %} latest {% endif %} {{ addonTypeHumanizer[selectedAddonType].lower() }}, updated at {{ updateTime }}. {% if isIndex %} Select a version and a category above to view all results. {% endif %} All times are UTC.</p>
 		{% else %}
 		<style>
 		#sort {
