@@ -1,7 +1,3 @@
-echo "arg is $1"
-
-echo "TEST_ENV is $TEST_ENV"
-
 echo "creating public dir"
 
 mkdir -p public
