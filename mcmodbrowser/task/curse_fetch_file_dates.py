@@ -57,6 +57,6 @@ def run():
     
     print("Fetched", fetched, "values")
 
-    mapping["lastModified"] = datetime.datetime.utcnow().timestamp()
+    mapping["lastModified"] = epochNow()
 
     writeJson(mapping, outFile)

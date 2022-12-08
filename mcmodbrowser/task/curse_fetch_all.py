@@ -43,7 +43,7 @@ def run():
     # back by 3 days to make sure we grab everything
     dictGetWithCreate(index, "cursors")["curse"] = maxModifiedTimestamp - 60 * 60 * 24 * 3
 
-    index['lastModified'] = datetime.datetime.utcnow().timestamp()
+    index['lastModified'] = epochNow()
     
     print("Updated", fetched, "mods")
     

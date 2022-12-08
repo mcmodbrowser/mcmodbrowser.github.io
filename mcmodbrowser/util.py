@@ -1,6 +1,7 @@
 import json
 import sys
 import os
+import datetime
 from pathlib import Path
 
 def loadJson(path):
@@ -32,3 +33,6 @@ def dictGetWithCreate(d, *keys):
         p = p[key]
     
     return p
+    
+def epochNow():
+    return datetime.datetime.now(datetime.timezone.utc).timestamp()

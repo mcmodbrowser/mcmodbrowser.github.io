@@ -1,8 +1,8 @@
 import requests
 import datetime
-from mcmodbrowser.util import loadJson, writeJson, getCurseToken
-from mcmodbrowser.model.curse import getCurseHeaders
-from mcmodbrowser.index import writeCurseModToIndex, getCurseModLastModifiedTimestamp
+from mcmodbrowser.index import *
+from mcmodbrowser.util import *
+from mcmodbrowser.model.curse import *
 
 def run():
     '''Fetch recently updated mods and put them in the index.'''
@@ -52,7 +52,7 @@ def run():
     if firstModModificationDate:
         index['cursors']['curse'] = firstModModificationDate
     
-    index['lastModified'] = datetime.datetime.utcnow().timestamp()
+    index['lastModified'] = epochNow()
     
     print("Updated", fetched, "mods")
     
