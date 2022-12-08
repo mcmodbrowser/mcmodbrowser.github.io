@@ -37,8 +37,8 @@ jobs:
           key: data
       - name: Build
         env:
-          SECRET_TEST: ${{ secrets.REPO_SECRET_TEST }}
-        run: ./build.sh $SECRET_TEST
+          SECRET_TEST: ${{ secrets.SECRET_TEST }}
+        run: ./build.sh
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
