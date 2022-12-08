@@ -1,6 +1,13 @@
 import os
 import datetime
 
+
+print("TEST_ENV inside hello.py is...")
+if "TEST_ENV" in os.environ:
+    print(os.environ["TEST_ENV"])
+else:
+    print("nuffin.")
+
 memory = []
 
 if not os.path.isdir("data"):
