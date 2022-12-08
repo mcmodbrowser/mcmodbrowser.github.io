@@ -13,7 +13,7 @@ def run():
 
     interruptSearch = False
     
-    print("Fetching mods since", datetime.datetime.utcfromtimestamp(index['cursors']['curse']).isoformat())
+    print("Fetching mods since", datetime.datetime.utcfromtimestamp(index['cursors']['curse']).isoformat(), "(", index['cursors']['curse'], ")")
     
     firstModModificationDate = None
     fetched = 0
@@ -34,7 +34,10 @@ def run():
                 if first:
                     print("Search index:", searchIndex, "First mod:", datetime.datetime.utcfromtimestamp(lastModified).isoformat())
                 
+                print("  updating:", mod['slug'])
+                
                 if lastModified < index['cursors']['curse']:
+                    print("Older than cursor, aborting")
                     interruptSearch = True
                     break
                     
