@@ -34,6 +34,7 @@ jobs:
         with:
           path: |
             ./data
+          key: data
       - name: Build
         run: ./build.sh
       - name: Upload artifact
