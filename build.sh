@@ -1,3 +1,3 @@
 mkdir -p public
 
-python3 hello.py
+echo "<h1>hi</h1>" > public/index.html
