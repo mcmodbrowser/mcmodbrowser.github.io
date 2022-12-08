@@ -17,6 +17,7 @@ def run():
     
     firstModModificationDate = None
     fetched = 0
+    fetchedExtra = 0
 
     for searchIndex in range(0, 10000, 50):
         if interruptSearch:
@@ -37,9 +38,14 @@ def run():
                 print("  updating:", mod['slug'])
                 
                 if lastModified < index['cursors']['curse']:
-                    print("Older than cursor, aborting")
-                    interruptSearch = True
-                    break
+                    # Fetch some redundant entries to cope with unreliable API
+                    if fetchedExtra == 0:
+                        print("Older than cursor, fetching 30 more")
+                    fetchedExtra += 1
+                    if fetchedExtra > 30:
+                        print("Fetched 30 extra entries, aborting")
+                        interruptSearch = True
+                        break
                     
                 if writeCurseModToIndex(index, mod):
                     fetched += 1
