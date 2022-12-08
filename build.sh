@@ -1,4 +1,4 @@
-echo "arg is $1"
+echo "arg is $SECRET_TEST"
 
 echo "creating public dir"
 
