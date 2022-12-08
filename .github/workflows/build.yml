@@ -43,6 +43,13 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           path: 'public'
+      - name: Delete cache
+        run: |
+          curl --request DELETE \
+          --url https://api.github.com/repos/${{ github.repository }}/actions/caches?key=data \
+          --header "Accept: application/vnd.github+json" \
+          --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "X-GitHub-Api-Version: 2022-11-28"
   deploy:
     environment:
       name: github-pages
