@@ -101,28 +101,41 @@ def run():
     def fileIdToApproximateDate(p):
         return humanizeIsoTimestamp(datetime.datetime.utcfromtimestamp(fileIdToApproximateEpoch(p)).isoformat())
 
-    def createTemplateEntries(addons, version):
+    def createTemplateEntries(index, addonType, version):
         result = []
-        
-        for slug in addons:
-            addonMulti = addons[slug]
-            
-            addon = addonMulti['curse']
-            
-            if not version in addon['versions']:
+        for type in index['data'].keys():
+            if addonType != 'index' and type != addonType:
                 continue
             
-            result.append({
-                'name': addon['name'],
-                'url': addon['url'],
-                'description': addon['desc'],
-                'authors': ', '.join(addon['authors']),
-                'downloads': addon['downloads'],
-                'downloadsFormatted': addon['downloads'],
-                'lastModifiedDefault': fileIdToApproximateDate(max(x['fileId'] for x in addon['versions'][version].values())).replace(" ", "&nbsp")
-            })
+            for slug in index['data'][type]:
+                addonMulti = index['data'][type][slug]
+                
+                addon = addonMulti['curse']
+                
+                if version != 'index' and not version in addon['versions']:
+                    continue
+                
+                latestFileId = None
+                if version != 'index':
+                    latestFileId = max(x['fileId'] for x in addon['versions'][version].values())
+                else:
+                    for ver in addon['versions']:
+                        latestFileId = max((latestFileId or 0), max(x['fileId'] for x in addon['versions'][ver].values()))
+                
+                result.append({
+                    'name': addon['name'],
+                    'url': addon['url'],
+                    'description': addon['desc'],
+                    'authors': ', '.join(addon['authors']),
+                    'downloads': addon['downloads'],
+                    'downloadsFormatted': addon['downloads'],
+                    'lastModifiedDefault': fileIdToApproximateDate(latestFileId).replace(" ", "&nbsp")
+                })
         
-        result = reversed(sorted(result, key=lambda addon: addon['lastModifiedDefault']))
+        result = list(reversed(sorted(result, key=lambda addon: addon['lastModifiedDefault'])))
+        
+        if version == 'index' or addonType == 'index':
+            result = result[:1000]
         
         return result
         
@@ -139,7 +152,7 @@ def run():
         'modpacks': 'Modpacks',
         'customizations': 'Customizations',
         'addons': 'Addons',
-        'index': 'Mod Browser'
+        'index': 'Addons'
     }
     VERSIONS = ['1.0.0', '1.0.1', '1.1', '1.2.5', '1.3.2', '1.4.7', '1.5.2', '1.6.4', '1.7.10', '1.8.9', '1.9.4', '1.10.2', '1.11.2', '1.12.2', '1.13.2', '1.14.4', '1.15.2', '1.16.5', '1.17.1', '1.18.2', '1.19.2', '1.19.3']
     MAIN_VERSIONS = ['1.2.5', '1.4.7', '1.6.4', '1.7.10', '1.8.9', '1.12.2', '1.16.5', '1.18.2']
@@ -150,7 +163,7 @@ def run():
             
             isIndex = addonType == "index" and version == "index"
             
-            addons = list(createTemplateEntries(index['data'].get(addonType) or [], version)) if not isIndex else []
+            addons = list(createTemplateEntries(index, addonType, version))
             
             if not isIndex:
                 os.makedirs("public/" + addonType, exist_ok=True)
