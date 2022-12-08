@@ -1,3 +1,5 @@
+echo "arg is $1"
+
 echo "creating public dir"
 
 mkdir -p public
