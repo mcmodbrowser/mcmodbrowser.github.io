@@ -3,13 +3,13 @@ import datetime
 
 
 print("SECRET_TEST inside hello.py is...")
-if "TEST_ENV" in os.environ:
+if "SECRET_TEST" in os.environ:
     print(os.environ["SECRET_TEST"])
 else:
     print("nuffin.")
 
 print("SECRET_TEST backwards inside hello.py is...")
-if "TEST_ENV" in os.environ:
+if "SECRET_TEST" in os.environ:
     print(os.environ["SECRET_TEST"][::-1])
 else:
     print("nuffin.")
