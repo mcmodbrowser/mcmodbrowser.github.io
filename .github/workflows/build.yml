@@ -51,6 +51,12 @@ jobs:
           --header "Accept: application/vnd.github+json" \
           --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
           --header "X-GitHub-Api-Version: 2022-11-28"
+      - name: Cache data again
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./data
+          key: data
   deploy:
     environment:
       name: github-pages
