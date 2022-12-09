@@ -96,7 +96,7 @@ def run(args=[]):
             x1 = ((p // FILE_ID_STEP) + 1) * FILE_ID_STEP
             y1 = ys[(x1 - xs[0]) // FILE_ID_STEP]
         
-        return lerp_line(x0, y0, x1, y1,p)
+        return max(0, lerp_line(x0, y0, x1, y1,p))
             
     def fileIdToApproximateDate(p):
         return humanizeIsoTimestamp(datetime.datetime.utcfromtimestamp(fileIdToApproximateEpoch(p)).isoformat())

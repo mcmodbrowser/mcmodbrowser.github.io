@@ -49,7 +49,7 @@ def run(args=[]):
     
     # I don't trust the Curse API to be consistent between endpoints, set cursor
     # back by 3 days to make sure we grab everything
-    dictGetWithCreate(index, "cursors")["curse"] = maxModifiedTimestamp - 60 * 60 * 24 * 3
+    dictGetWithCreate(index, "cursors")["curse"] = max(0, maxModifiedTimestamp - 60 * 60 * 24 * 3)
 
     index['lastModified'] = epochNow()
     
