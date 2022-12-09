@@ -4,7 +4,7 @@ from mcmodbrowser.index import *
 from mcmodbrowser.util import *
 from mcmodbrowser.model.curse import *
 
-def run():
+def run(args=[]):
     '''Fetch data of ALL the addons, and dump them.'''
     
     i = 0

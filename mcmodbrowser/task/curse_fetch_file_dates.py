@@ -6,7 +6,7 @@ from mcmodbrowser.index import *
 from mcmodbrowser.util import *
 from mcmodbrowser.model.curse import *
 
-def run():
+def run(args=[]):
     '''Fetch fileId -> date mappings for use in interpolation.
     
     The Curse API doesn't tell us the modification dates of files when fetching

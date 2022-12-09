@@ -8,7 +8,7 @@ from jinja2 import Template
 import os
 from mcmodbrowser.util import humanizeIsoTimestamp
 
-def run():
+def run(args=[]):
     '''Generate HTMLs from index.'''
 
     if False in [os.path.exists(x) for x in [".git", "public_template"]]:

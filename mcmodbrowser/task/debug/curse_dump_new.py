@@ -4,7 +4,7 @@ from mcmodbrowser.util import loadJson, writeJson, getCurseToken
 from mcmodbrowser.model.curse import getCurseHeaders
 from mcmodbrowser.index import writeCurseModToIndex, getCurseModLastModifiedTimestamp
 
-def run():
+def run(args=[]):
     '''Fetch recently updated mods and dump them.'''
     
     curseToken = getCurseToken()
