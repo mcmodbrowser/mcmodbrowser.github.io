@@ -14,6 +14,8 @@ def run(args=[]):
     sequentially. So we fetch the dates of some file IDs, and interpolate
     between them to approximate the modification date of any file ID.
     '''
+    
+    requestLimit = int(args[args.index("--request-limit") + 1]) if "--request-limit" in args else -1
 
     curseToken = getCurseToken()
 
@@ -28,12 +30,18 @@ def run(args=[]):
 
     emptyCombo = 0
     fetched = 0
+    requestCount = 0
 
     while True:
         print("Fetching {}XXX00".format(i))
         data = {"fileIds": [x * 100 for x in list(range(i * 1000, (i+1) * 1000))]}
         
         resp = requests.post("https://api.curseforge.com/v1/mods/files", json = data, headers = getCurseHeaders(curseToken))
+        requestCount += 1
+        
+        if requestLimit != -1 and requestCount > requestLimit:
+            print("Reached request limit, aborting")
+            break
         
         if resp.status_code == 200:
             assert "data" in resp.json()

@@ -7,6 +7,8 @@ from mcmodbrowser.model.curse import *
 def run(args=[]):
     '''Fetch recently updated mods and put them in the index.'''
     
+    requestLimit = int(args[args.index("--request-limit") + 1]) if "--request-limit" in args else -1
+    
     curseToken = getCurseToken()
 
     index = loadJson("data/index.json")
@@ -17,6 +19,7 @@ def run(args=[]):
     
     firstModModificationDate = None
     fetched = 0
+    requestCount = 0
     fetchedExtra = 0
 
     for searchIndex in range(0, 10000, 50):
@@ -24,6 +27,11 @@ def run(args=[]):
             break
         
         resp = requests.get("https://api.curseforge.com/v1/mods/search?gameId=432&sortField=3&sortOrder=desc&pageSize=50&index={}".format(searchIndex), headers = getCurseHeaders(curseToken))
+        requestCount += 1
+        
+        if requestLimit != -1 and requestCount > requestLimit:
+            print("Reached request limit, aborting")
+            break
         
         if resp.status_code == 200:
             assert "data" in resp.json()
