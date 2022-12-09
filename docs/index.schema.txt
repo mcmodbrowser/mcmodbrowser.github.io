@@ -3,7 +3,7 @@ data {
         addonSlug... {
             websiteID... {
                 name
-                description
+                desc
                 authors [
                     author...
                 ]
@@ -12,7 +12,7 @@ data {
                 versions {
                     version... {
                         loader... {
-                            lastModified
+                            fileId
                         }
                     }
                 }
