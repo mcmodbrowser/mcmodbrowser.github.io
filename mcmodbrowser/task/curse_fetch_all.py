@@ -1,5 +1,5 @@
 import requests
-import datetime
+import time
 
 from mcmodbrowser.index import *
 from mcmodbrowser.util import *
@@ -27,6 +27,7 @@ def run(args=[]):
         
         resp = requests.post("https://api.curseforge.com/v1/mods", json = data, headers = getCurseHeaders(curseToken))
         requestCount += 1
+        time.sleep(0.5)
         
         if requestLimit != -1 and requestCount > requestLimit:
             print("Reached request limit, aborting")
