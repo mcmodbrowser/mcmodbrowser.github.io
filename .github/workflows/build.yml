@@ -39,7 +39,7 @@ jobs:
         run: python3 ./github_ci_init.py
       - name: Build
         env:
-          SECRET_TEST: ${{ secrets.REPO_SECRET_TEST }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
         run: ./build.sh
       - name: Upload page artifact
         uses: actions/upload-pages-artifact@v1
