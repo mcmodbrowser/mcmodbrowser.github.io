@@ -19,6 +19,7 @@ def run(args=[]):
     maxModifiedTimestamp = 0
     requestCount = 0
     fetched = 0
+    missCombo = 0
 
     while True:
         print("Fetching {}XXX".format(i))
@@ -34,13 +35,21 @@ def run(args=[]):
         if resp.status_code == 200:
             assert "data" in resp.json()
             
-            for mod in resp.json()["data"]:
-                if writeCurseModToIndex(index, mod):
-                    fetched += 1
-                    
-                    ts = getCurseModLastModifiedTimestamp(mod)
-                    if ts > maxModifiedTimestamp:
-                        maxModifiedTimestamp = ts
+            if resp.json()["data"]:
+                missCombo = 0
+                for mod in resp.json()["data"]:
+                    if writeCurseModToIndex(index, mod):
+                        fetched += 1
+                        
+                        ts = getCurseModLastModifiedTimestamp(mod)
+                        if ts > maxModifiedTimestamp:
+                            maxModifiedTimestamp = ts
+            else:
+                missCombo += 1
+                
+                if missCombo >= 300:
+                    print("Got 300 empty responses in a row, aborting")
+                    break
         else:
             print("ERROR: got status code", resp.status_code)
             break
