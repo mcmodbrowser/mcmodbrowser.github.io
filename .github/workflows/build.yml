@@ -42,7 +42,7 @@ jobs:
       - name: Build
         env:
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-        run: python3 update.py --limit-requests
+        run: python3 update.py
       - name: Upload page artifact
         uses: actions/upload-pages-artifact@v1
         with:
