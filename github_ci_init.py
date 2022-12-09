@@ -18,6 +18,6 @@ resp = requests.get(f"https://api.github.com/repos/{repoName}/actions/artifacts?
 print("Last response:", resp)
 
 url = resp["artifacts"][0]["archive_download_url"]
-subprocess.run(["wget", "--header", f"Authorization: Bearer {githubToken}", "-O", "tmp_data.zip"])
+subprocess.run(["wget", "--header", f"Authorization: Bearer {githubToken}", "-O", "tmp_data.zip", url])
 subprocess.run(["unzip", "tmp_data.zip", "-d", "data"])
 os.remove("tmp_data.zip")
