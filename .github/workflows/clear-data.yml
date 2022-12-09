@@ -21,9 +21,9 @@ jobs:
   # Single deploy job since we're just deploying
   build:
     runs-on: ubuntu-latest
+    steps:
       - name: Create data dir
         run: mkdir data
-    steps:
       - name: Upload data artifact
         uses: actions/upload-artifact@v3
         with:
