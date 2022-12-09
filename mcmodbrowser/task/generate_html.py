@@ -35,7 +35,7 @@ def run(args=[]):
     FILE_ID_STEP = 100
     
     def loadFileDates():
-        fileDates = loadJson("data/fileDates.json")    
+        fileDates = loadJson("data/curseFileDates.json")    
         
         fileDatesMapping = {}
         for id, date in fileDates['data'].items():

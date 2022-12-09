@@ -19,7 +19,7 @@ def run(args=[]):
 
     curseToken = getCurseToken()
 
-    outFile = "data/fileDates.json"
+    outFile = "data/curseFileDates.json"
     
     i = 0
     mapping = {'data': {}}
