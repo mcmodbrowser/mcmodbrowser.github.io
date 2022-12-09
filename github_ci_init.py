@@ -24,4 +24,4 @@ os.remove("tmp_data.zip")
 
 with open(".github_env", "w", encoding="utf8") as fp:
     fp.write("TEST_CONDITION_1=true\n")
-    fp.write("TEST_CONDITION_2=true\n")
+    fp.write("TEST_CONDITION_2=false\n")
