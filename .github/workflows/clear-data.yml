@@ -1,0 +1,29 @@
+# Simple workflow for deploying static content to GitHub Pages
+name: Clear data
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  actions: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # Single deploy job since we're just deploying
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload data artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: 'data'
+          path: 'data'
