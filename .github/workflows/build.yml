@@ -41,7 +41,7 @@ jobs:
         with:
           path: 'public'
       - name: Upload artifact
-        uses: actions/actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: 'data'
           path: 'data'
