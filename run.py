@@ -1,7 +1,7 @@
-import importlib
 import sys
 import glob
 import os
+from mcmodbrowser.main import runTask
 
 def listTasks():
     tasks = []
@@ -17,5 +17,4 @@ if __name__ == "__main__":
 
 Available tasks:\n{}'''.format(sys.argv[0], "\n".join(["    " + x for x in listTasks()])))
     
-    mod = importlib.import_module("mcmodbrowser.task.{}".format(sys.argv[1]))
-    mod.run(sys.argv[2:])
+    runTask(sys.argv[1], sys.argv[2:])

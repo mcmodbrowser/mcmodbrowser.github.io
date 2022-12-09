@@ -37,17 +37,11 @@ jobs:
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python3 ./github_ci_init.py && cat .github_env >> $GITHUB_ENV
-      - name: Test environmental variable 1
-        if: ${{ env.TEST_CONDITION_1 == 'true' }}
-        run: echo success_1
-      - name: Test environmental variable 2
-        if: ${{ env.TEST_CONDITION_2 == 'true' }}
-        run: echo success_2
+        run: python3 ./github_ci_init.py
       - name: Build
         env:
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-        run: ./build.sh
+        run: python3 update.py --limit-requests
       - name: Upload page artifact
         uses: actions/upload-pages-artifact@v1
         with:

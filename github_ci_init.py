@@ -21,7 +21,3 @@ url = resp["artifacts"][0]["archive_download_url"]
 subprocess.run(["wget", "--header", f"Authorization: Bearer {githubToken}", "-O", "tmp_data.zip", url])
 subprocess.run(["unzip", "tmp_data.zip", "-d", "data"])
 os.remove("tmp_data.zip")
-
-with open(".github_env", "w", encoding="utf8") as fp:
-    fp.write("TEST_CONDITION_1=true\n")
-    fp.write("TEST_CONDITION_2=false\n")
