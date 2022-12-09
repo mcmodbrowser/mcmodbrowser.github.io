@@ -115,12 +115,16 @@
 			cursor: pointer;
 		}
 		
-		#swatch {
+		#topRight {
 			position: absolute;
 			right: 0;
 			top: 0;
+		}
+		
+		#styleSwatch {
 			padding-top: 16px;
 			padding-right: 16px;
+			display: inline-block;
 		}
 		
 		.craftyInlineBlock {
@@ -149,6 +153,17 @@
 		#addonTypes {
 			margin-bottom: 0px;
 		}
+		
+		#footer {
+			padding-left: 10px;
+			padding-bottom: 20px;
+			text-align: center;
+		}
+		
+		#disclaimer {
+			margin-bottom: 14px;
+		}
+		
 	</style>
 
 	<div id="header">
@@ -168,7 +183,9 @@
 		</div>
 		{% endfor %}
 		<p id="msg">&nbsp</p>
-		<a id="swatch" onclick="toggleStyle()">Toggle style</a>
+		<div id="topRight">
+			<a><div id="styleSwatch" onclick="toggleStyle()">Toggle style</div></a>
+		</div>
 		<p id="addonTypes">
 			{% for addonType in addonTypes %}
 			{% if addonType != selectedAddonType %}
@@ -216,8 +233,15 @@
 			{% endfor %}
 		</tbody>
 		</table>
-
-		<p id="disclaimer">Modification dates are approximate. Data provided by the CurseForge API.</p>
+		
+		<div id="footer">
+			<div>
+				<p id="disclaimer">Modification dates are approximate. Data provided by the CurseForge API.</p>
+			</div>
+			<div>
+				<a href="https://github.com/mcmodbrowser/mcmodbrowser.github.io">GitHub repository</a>
+			</div>
+		</div>
 	</div>
 
 	<script>
