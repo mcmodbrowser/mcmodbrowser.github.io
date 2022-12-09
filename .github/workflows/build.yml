@@ -39,15 +39,19 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 ./github_ci_init.py
-      - name: Build
+      - name: Fetch data
+        if: ${{ github.event_name != 'push' }}
         env:
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-        run: python3 update.py
+        run: python3 fetch.py
+      - name: Generate HTML
+        run: python3 run.py generate_html
       - name: Upload page artifact
         uses: actions/upload-pages-artifact@v1
         with:
           path: 'public'
       - name: Upload data artifact
+        if: ${{ github.event_name != 'push' }}
         uses: actions/upload-artifact@v3
         with:
           name: 'data'

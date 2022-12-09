@@ -11,4 +11,3 @@ if not os.path.exists("data/index.json"):
 
 runTask("curse_fetch_new", [] + extraArgs)
 runTask("curse_fetch_file_dates", [] + extraArgs)
-runTask("generate_html")
