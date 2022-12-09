@@ -21,3 +21,7 @@ url = resp["artifacts"][0]["archive_download_url"]
 subprocess.run(["wget", "--header", f"Authorization: Bearer {githubToken}", "-O", "tmp_data.zip", url])
 subprocess.run(["unzip", "tmp_data.zip", "-d", "data"])
 os.remove("tmp_data.zip")
+
+if os.path.isfile("data/.gitkeep"):
+    # Dummy file added by the clear-data workflow
+    os.remove("data/.gitkeep")

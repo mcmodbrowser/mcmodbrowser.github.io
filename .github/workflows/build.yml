@@ -35,7 +35,6 @@ jobs:
       - name: Install Python dependencies
         run: python3 -m pip install -r requirements.txt
       - name: Restore last data artifact
-        if: ${{ !(github.event_name == 'push' && contains(github.event.head_commit.message, '[clear data]')) }}
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
