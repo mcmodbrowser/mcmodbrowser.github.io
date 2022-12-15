@@ -80,12 +80,12 @@ def run(args=[]):
         xs = fileDatesXs
         ys = fileDatesYs
         
-        if p < xs[0]:
+        if p <= xs[0]:
             x0 = xs[0]
             y0 = ys[0]
             x1 = xs[1]
             y1 = ys[1]
-        elif p > xs[-1]:
+        elif p >= xs[-1]:
             x0 = xs[-2]
             y0 = ys[-2]
             x1 = xs[-1]
