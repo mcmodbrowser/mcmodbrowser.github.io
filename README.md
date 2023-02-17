@@ -2,7 +2,7 @@
 
 An alternate search interface for [CurseForge](https://www.curseforge.com/minecraft/mc-mods) that lets you filter Minecraft mods by game version properly. Unlike the official interface, it sorts mods according to when they received updates for your selected game version specifically.
 
-Available **[here](https://mcmodbrowser.github.io)**.
+Available **[here](https://mcmodbrowser.github.io)**. 
 
 ## Credits
 
