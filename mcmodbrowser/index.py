@@ -49,7 +49,7 @@ def writeCurseModToIndex(index, mod):
     
     for ver in mod["latestFilesIndexes"]:
         verData = versions.get(ver["gameVersion"]) or {}
-        modLoader = convertModLoader(ver["modLoader"])
+        modLoader = convertModLoader(ver.get("modLoader"))
         if modLoader not in verData or verData[modLoader]['fileId'] < ver['fileId']:
             verData[modLoader] = {"fileId": ver["fileId"]}
         versions[ver["gameVersion"]] = verData
