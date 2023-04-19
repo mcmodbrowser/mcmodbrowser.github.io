@@ -101,6 +101,10 @@ def run(args=[]):
     def fileIdToApproximateDate(p):
         return humanizeIsoTimestamp(datetime.datetime.utcfromtimestamp(fileIdToApproximateEpoch(p)).isoformat())
 
+    def fixUrl(url):
+        # Curse API has started returning nonsense subdomains, let's just use legacy because the new interface sucks anyway
+        return "https://legacy." + url[url.index("curseforge.com"):]
+
     def createTemplateEntries(index, addonType, version):
         result = []
         for type in index['data'].keys():
@@ -124,7 +128,7 @@ def run(args=[]):
                 
                 result.append({
                     'name': addon['name'],
-                    'url': addon['url'],
+                    'url': fixUrl(addon['url']),
                     'description': addon['desc'],
                     'authors': ', '.join(addon['authors']),
                     'downloads': addon['downloads'],
