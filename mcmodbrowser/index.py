@@ -25,7 +25,8 @@ def convertModLoader(modLoader):
         2: 'cauldron',
         3: 'liteloader',
         4: 'fabric',
-        5: 'quilt'
+        5: 'quilt',
+        6: 'neoforge',
     }
     
     if modLoader == None:
