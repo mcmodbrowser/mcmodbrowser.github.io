@@ -2,16 +2,6 @@
 <html>
 <head>
 	<link id="style" rel="stylesheet" href="{{ rootPath }}minecraft.css">
-	<script>
-	var styles = ["minecraft", "green_dark", "blue_dark", "pink_dark", "light"];
-	if(localStorage["style"] && styles.includes(localStorage["style"])){
-		setStyle(localStorage["style"]);
-	}
-	
-	function setStyle(style){
-		document.getElementById("style").setAttribute("href", "{{ rootPath }}" + style + ".css");
-	}
-	</script>
 	<title>{% if selectedVersion != 'index' or selectedAddonType != 'index' %} Minecraft {{ addonTypeHumanizer[selectedAddonType] }} for {{ selectedVersion }} - mcmodbrowser {% else %} Minecraft Mod Browser {% endif %}</title>
 	<meta charset='utf-8' />
 	<meta name="description" content="Browse Minecraft mods on CurseForge by game version.">
@@ -70,13 +60,13 @@
 		.plus:hover {
 			cursor: zoom-in;
 		}
-		#trigger:checked ~ .plus:hover {
+		#versionToggle:checked ~ .plus:hover {
 			cursor: zoom-out;
 		}
-		#trigger:checked ~ .altVer {
+		#versionToggle:checked ~ .altVer {
 			display: inline;
 		}
-		#trigger {
+		#versionToggle {
 			display: none;
 		}
 		label {
@@ -157,7 +147,7 @@
 
 	<div id="header">
 		<span class="title" id="title"><span class="normal">Minecraft</span><img class="craftyInlineBlock" height=28px src="{{ rootPath }}mc_logo.png"></img> {{ addonTypeHumanizer[selectedAddonType].lower() }}</span>
-		<input id="trigger" type="checkbox">
+		<input id="versionToggle" type="checkbox" onchange="onVersionToggleChanged()">
 		<label class="hpad">for</label>
 		<br id="titleBreak">
 		{% for version in versions %}
@@ -170,7 +160,7 @@
 			{% if not loop.last %}<span class="sep">|</span>{% endif %}
 		</div>
 		{% endfor %}
-		<label class="plus hpad" for="trigger">+</label>
+		<label id="versionToggleLabel" class="plus hpad" for="versionToggle">+</label>
 		<p id="msg">&nbsp</p>
 		<div id="topRight">
 			<a><div id="styleSwatch" onclick="toggleStyle()">Toggle style</div></a>
@@ -234,6 +224,22 @@
 	</div>
 
 	<script>
+		var styles = ["minecraft", "green_dark", "blue_dark", "pink_dark", "light"];
+		if(localStorage["style"] && styles.includes(localStorage["style"])){
+			setStyle(localStorage["style"]);
+		}
+		
+		function setStyle(style){
+			document.getElementById("style").setAttribute("href", "{{ rootPath }}" + style + ".css");
+		}
+		
+		if(localStorage["versionsExpanded"] != undefined){
+			setVersionsExpanded(JSON.parse(localStorage["versionsExpanded"]));
+		}
+		function setVersionsExpanded(expanded){
+			$("#versionToggleLabel")[0].checked = expanded
+		}
+		
 		function toggleStyle(){
 			currentStyle = localStorage["style"];
 			if(!currentStyle || !styles.includes(currentStyle)){
@@ -244,7 +250,12 @@
 			localStorage["style"] = newStyle;
 		}
 		
-		function doThing(){
+		function onVersionToggleChanged(){
+			let checked = $("#versionToggle")[0].checked;
+			localStorage["versionsExpanded"] = checked;
+		}
+		
+		function initTable(){
 			var table = $("#sort").stupidtable();
 
 			table.on("beforetablesort", function (event, data) {
@@ -271,7 +282,7 @@
 		$(document).ready(function(){
 			$.ajaxSetup({ cache: false });
 			
-			doThing();
+			initTable();
 		});
 	</script>
 
