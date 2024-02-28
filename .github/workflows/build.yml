@@ -45,7 +45,7 @@ jobs:
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
         run: python3 fetch.py
       - name: Generate HTML
-        run: python3 run.py generate_html
+        run: python3 build.py generate_html
       - name: Upload page artifact
         uses: actions/upload-pages-artifact@v1
         with:
