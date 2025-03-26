@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 #      - name: Setup Pages
 #        uses: actions/configure-pages@v2
       - name: Install Python dependencies
@@ -47,12 +47,12 @@ jobs:
       - name: Generate HTML
         run: python3 build.py generate_html
       - name: Upload page artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: 'public'
       - name: Upload data artifact
         if: ${{ github.event_name != 'push' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: 'data'
           path: 'data'
@@ -65,4 +65,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
