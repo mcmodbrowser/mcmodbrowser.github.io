@@ -29,4 +29,4 @@ jobs:
         with:
           name: 'data'
           path: 'data'
-          include-hidden-files: 'true'
+          include-hidden-files: true
