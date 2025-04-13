@@ -32,8 +32,7 @@ def convertModLoader(modLoader):
     if modLoader == None:
         return 'none'
     
-    return m[modLoader]
-
+    return m.get(modLoader) or f"unmapped-curse-loader-{modLoader}"
 
 def writeCurseModToIndex(index, mod):
     '''Returns true if something was written to the index.'''
