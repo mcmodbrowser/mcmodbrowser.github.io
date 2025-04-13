@@ -16,7 +16,7 @@ def addonClassIdToType(classId):
         6: "mods"
     }
     
-    return m.get(classId) or f"unknown-curse-class-{classId}"
+    return m.get(classId) or f"unmapped-curse-class-{classId}"
 
 def convertModLoader(modLoader):
     m = {
@@ -30,7 +30,7 @@ def convertModLoader(modLoader):
     }
     
     if modLoader == None:
-        return 'unknown'
+        return 'none'
     
     return m[modLoader]
 
