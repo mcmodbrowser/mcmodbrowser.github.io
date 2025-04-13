@@ -1,6 +1,21 @@
 import requests
 import os
 import subprocess
+import sys
+
+def validate_response(r):
+    if not r.ok:
+        print(f"Request to {r.url} failed!")
+        print("Raw response:")
+        print(r.text)
+        sys.exit(1)
+    else:
+        return r
+
+def write_response_content(r, out):
+    with open(out, "wb") as fp:
+        for data in resp.iter_content(chunk_size=1024*1024):
+            fp.write(data)
 
 repoName = os.environ["GITHUB_REPOSITORY"]
 githubToken = os.environ["GITHUB_TOKEN"]
@@ -13,12 +28,17 @@ headers = {
 
 print("Downloading last data artifact")
 
-resp = requests.get(f"https://api.github.com/repos/{repoName}/actions/artifacts?name=data&per_page=1", headers = headers).json()
+resp = validate_response(requests.get(f"https://api.github.com/repos/{repoName}/actions/artifacts?name=data&per_page=1", headers=headers)).json()
 
 print("Last response:", resp)
 
 url = resp["artifacts"][0]["archive_download_url"]
-subprocess.run(["wget", "--header", f"Authorization: Bearer {githubToken}", "-O", "tmp_data.zip", url])
+
+resp = validate_response(requests.get(url, headers=headers, stream=True))
+
+write_response_content(resp, "tmp_data.zip")
+
+sys.stdout.flush()
 subprocess.run(["unzip", "tmp_data.zip", "-d", "data"])
 os.remove("tmp_data.zip")
 
