@@ -6,6 +6,20 @@ from mcmodbrowser.index import *
 from mcmodbrowser.util import *
 from mcmodbrowser.model.curse import *
 
+def getMaxFileId(path):
+    maxFileId = None
+    
+    data = json.load(open(path, "r"))
+    for type, slugMap in data["data"].items():
+        for slug, hostMap in slugMap.items():
+            addon = hostMap["curse"]
+            for version, loaderMap in addon["versions"].items():
+                for loader, file in loaderMap.items():
+                    fileId = file["fileId"]
+                    maxFileId = max(fileId, maxFileId) if maxFileId != None else fileId
+    
+    return maxFileId
+
 def run(args=[]):
     '''Fetch fileId -> date mappings for use in interpolation.
     
@@ -16,7 +30,10 @@ def run(args=[]):
     '''
     
     requestLimit = int(args[args.index("--request-limit") + 1]) if "--request-limit" in args else -1
-
+    maxId = getMaxFileId("data/index.json")
+    
+    print(f"Fetching until {maxId}")
+    
     curseToken = getCurseToken()
 
     outFile = "data/curseFileDates.json"
@@ -28,11 +45,10 @@ def run(args=[]):
         mapping = loadJson(outFile)
         i = (max([int(x) for x in mapping["data"].keys()]) // 100000) + 0
 
-    emptyCombo = 0
     fetched = 0
     requestCount = 0
 
-    while True:
+    while i <= maxId / 100000:
         print("Fetching {}XXX00".format(i))
         data = {"fileIds": [x * 100 for x in list(range(i * 1000, (i+1) * 1000))]}
         
@@ -46,20 +62,12 @@ def run(args=[]):
         if resp.status_code == 200:
             assert "data" in resp.json()
             
-            if not resp.json()['data']:
-                emptyCombo += 1
-                
-                if emptyCombo > 30:
-                    print("Got 30 empty responses in a row, terminating.")
-                    break
-            
             fetched += len(resp.json()['data'])
             
             for file in resp.json()['data']:
                 mapping['data'][file['id']] = dp.isoparse(file['fileDate']).timestamp()
         else:
-            print("ERROR: got status code", resp.status_code)
-            break
+            print("got status code", resp.status_code)
         
         i += 1
     
