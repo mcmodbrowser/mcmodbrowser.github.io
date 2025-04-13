@@ -25,7 +25,7 @@ jobs:
       - name: Create data dir
         run: mkdir data && touch data/.gitkeep
       - name: Upload data artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: 'data'
           path: 'data'
