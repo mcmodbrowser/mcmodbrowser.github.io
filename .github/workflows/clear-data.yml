@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create data dir
-        run: mkdir data
+        run: mkdir data && touch data/.gitkeep
       - name: Upload data artifact
         uses: actions/upload-artifact@v4
         with:
