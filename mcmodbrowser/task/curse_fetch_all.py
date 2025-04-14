@@ -39,6 +39,7 @@ def run(args=[]):
             if requestLimit != -1 and requestCount > requestLimit:
                 print("Reached request limit, aborting")
                 stop = True
+                success = True
                 break
             
             if resp.status_code == 200:
@@ -59,7 +60,6 @@ def run(args=[]):
                     if missCombo >= 300:
                         print("Got 300 empty responses in a row, aborting")
                         stop = True
-                        break
                 success = True
                 break
             else:
