@@ -62,7 +62,7 @@ def run(args=[]):
                 break
             else:
                 print("ERROR: got status code", resp.status_code)
-                if resp.status_code != 502:
+                if resp.status_code == 502:
                     sleep_mins = (2**attempt)*10
                     how_many_more = ATTEMPTS - attempt - 1
                     if how_many_more > 0:
