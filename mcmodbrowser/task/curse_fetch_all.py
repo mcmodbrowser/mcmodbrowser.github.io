@@ -1,5 +1,6 @@
 import requests
 import time
+import sys
 
 from mcmodbrowser.index import *
 from mcmodbrowser.util import *
@@ -28,6 +29,7 @@ def run(args=[]):
         success = False
         for attempt in range(ATTEMPTS):
             print("Fetching {}XXX".format(i))
+            sys.stdout.flush()
             data = {"modIds": list(range(i * 1000, (i+1) * 1000))}
             
             resp = requests.post("https://api.curseforge.com/v1/mods", json = data, headers = getCurseHeaders(curseToken))
